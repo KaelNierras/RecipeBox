@@ -46,7 +46,7 @@
                 <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none box-border" />
               </div>
               <div class="flex flex-col space-y-1.5">
-                <Label for="image">Image</Label>
+                <Label for="image">Cover Photo</Label>
                 <input id="image" type="file" @change="onFileChange" class="appearance-none box-border" />
               </div>
             </div>
