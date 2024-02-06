@@ -37,16 +37,16 @@
             <div class="grid items-center w-full gap-4">
               <div class="flex flex-col space-y-1.5">
                 <Label for="title">Recipe Title</Label>
-                <Input id="title" v-model="newRecipe.title" placeholder="Title of Recipe" class="appearance-none" />
+                <Input id="title" v-model="newRecipe.title" placeholder="Title of Recipe" class="appearance-none box-border" />
               </div>
               <div class="flex flex-col space-y-1.5">
                 <Label for="description">Description</Label>
-                <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none" />
+                <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none box-border" />
               </div>
               <div class="flex flex-col space-y-1.5">
                 <Label for="framework">Framework</Label>
                 <Select>
-                  <SelectTrigger id="framework" class="appearance-none">
+                  <SelectTrigger id="framework" class="appearance-none box-border">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent position="popper">
@@ -68,7 +68,7 @@
 
               <div class="flex flex-col space-y-1.5">
                 <Label for="image">Image</Label>
-                <input id="image" type="file" @change="onFileChange" class="appearance-none" />
+                <input id="image" type="file" @change="onFileChange" class="appearance-none box-border" />
               </div>
             </div>
           </form>
