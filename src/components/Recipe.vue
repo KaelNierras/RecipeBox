@@ -46,29 +46,6 @@
                 <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none box-border" />
               </div>
               <div class="flex flex-col space-y-1.5">
-                <Label for="framework">Framework</Label>
-                <Select>
-                  <SelectTrigger id="framework" class="appearance-none box-border">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="nuxt">
-                      Nuxt.js
-                    </SelectItem>
-                    <SelectItem value="next">
-                      Next.js
-                    </SelectItem>
-                    <SelectItem value="sveltekit">
-                      SvelteKit
-                    </SelectItem>
-                    <SelectItem value="astro">
-                      Astro
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div class="flex flex-col space-y-1.5">
                 <Label for="image">Image</Label>
                 <input id="image" type="file" @change="onFileChange" class="appearance-none box-border" />
               </div>
@@ -104,13 +81,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
