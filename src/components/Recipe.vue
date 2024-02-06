@@ -28,62 +28,60 @@
 
     <div class="fixed inset-0 flex items-center justify-center" v-if="isAddButtonClicked">
       <Card class="w-[350px]">
-      <CardHeader>
-        <CardTitle>Create Recipe</CardTitle>
-        <CardDescription>Make Delicious Recipes</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form id="addRecipeForm" @submit.prevent="addRecipe">
-          <div class="grid items-center w-full gap-4">
-            <div class="flex flex-col space-y-1.5">
-              <Label for="title">Recipe Title</Label>
-              <Input id="title"  v-model="newRecipe.title" placeholder="Title of Recipe" />
-            </div>
-            <div class="flex flex-col space-y-1.5">
-              <Label for="description">Description</Label>
-              <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" />
-            </div>
-            <div class="flex flex-col space-y-1.5">
-              <Label for="framework">Framework</Label>
-              <Select>
-                <SelectTrigger id="framework">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="nuxt">
-                    Nuxt.js
-                  </SelectItem>
-                  <SelectItem value="next">
-                    Next.js
-                  </SelectItem>
-                  <SelectItem value="sveltekit">
-                    SvelteKit
-                  </SelectItem>
-                  <SelectItem value="astro">
-                    Astro
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <CardHeader>
+          <CardTitle>Create Recipe</CardTitle>
+          <CardDescription>Make Delicious Recipes</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form id="addRecipeForm" @submit.prevent="addRecipe">
+            <div class="grid items-center w-full gap-4">
+              <div class="flex flex-col space-y-1.5">
+                <Label for="title">Recipe Title</Label>
+                <Input id="title" v-model="newRecipe.title" placeholder="Title of Recipe" class="appearance-none" />
+              </div>
+              <div class="flex flex-col space-y-1.5">
+                <Label for="description">Description</Label>
+                <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none" />
+              </div>
+              <div class="flex flex-col space-y-1.5">
+                <Label for="framework">Framework</Label>
+                <Select>
+                  <SelectTrigger id="framework" class="appearance-none">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="nuxt">
+                      Nuxt.js
+                    </SelectItem>
+                    <SelectItem value="next">
+                      Next.js
+                    </SelectItem>
+                    <SelectItem value="sveltekit">
+                      SvelteKit
+                    </SelectItem>
+                    <SelectItem value="astro">
+                      Astro
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div class="flex flex-col space-y-1.5">
-              <Label for="image">Image</Label>
-              <input id="image" type="file" @change="onFileChange" />
+              <div class="flex flex-col space-y-1.5">
+                <Label for="image">Image</Label>
+                <input id="image" type="file" @change="onFileChange" class="appearance-none" />
+              </div>
             </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter class="flex justify-between px-6 pb-6">
-        <Button variant="outline" @click="closeAddRecipe">
-          Cancel
-        </Button>
-        <Button type="submit" form="addRecipeForm">Add</Button>
-      </CardFooter>
-    </Card>
-
-
+          </form>
+        </CardContent>
+        <CardFooter class="flex justify-between px-6 pb-6">
+          <Button variant="outline" @click="closeAddRecipe">
+            Cancel
+          </Button>
+          <Button type="submit" form="addRecipeForm">Add</Button>
+        </CardFooter>
+      </Card>
     </div>
-    
+
     <button @click="OpenModal"
       class="w-12 h-12 fixed bottom-6 right-6 inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
       <span class="material-symbols-outlined text-center">
@@ -159,27 +157,27 @@ const closeAddRecipe = () => {
   isAddButtonClicked.value = false;
 };
 
-  let newRecipe = ref({
+let newRecipe = ref({
+  title: '',
+  description: '',
+  image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+});
+
+const addRecipe = () => {
+  items.value.push(newRecipe.value);
+  newRecipe.value = {
     title: '',
     description: '',
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  });
-
-  const addRecipe = () => {
-    items.value.push(newRecipe.value);
-    newRecipe.value = {
-      title: '',
-      description: '',
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    };
-    isAddButtonClicked.value = false;
   };
+  isAddButtonClicked.value = false;
+};
 
-  let selectedFile = ref<File | null>(null);
+let selectedFile = ref<File | null>(null);
 
-  const onFileChange = (e: Event) => {
-    selectedFile.value = ((e.target as HTMLInputElement)?.files?.[0] || null);
-  };
+const onFileChange = (e: Event) => {
+  selectedFile.value = ((e.target as HTMLInputElement)?.files?.[0] || null);
+};
 
 
 </script>
