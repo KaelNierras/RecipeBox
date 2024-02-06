@@ -3,7 +3,7 @@ import Sidebar from '@/components/Sidebar.vue';
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="w-screen h-scree">
     <Sidebar />
   </div>
 </template>

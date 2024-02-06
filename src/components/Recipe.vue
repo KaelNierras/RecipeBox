@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap">
+  <div class="pt-20 px-4 flex flex-wrap">
 
     <div v-for="(item, index) in items" :key="index"  @click="selectAndGoToRecipe(item)"
       class="m-3 w-96 h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
@@ -92,33 +92,32 @@ const items = ref([
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-    image: 'https://plus.unsplash.com/premium_photo-1663852297267-827c73e7529e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    title: 'Top tech startups 2021',
+    description: 'Here are the most promising tech startups of 2021.',
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-    image: 'https://plus.unsplash.com/premium_photo-1663852297267-827c73e7529e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    title: 'Innovative tech products 2021',
+    description: 'Here are the most innovative tech products released in 2021.',
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-    image: 'https://plus.unsplash.com/premium_photo-1663852297267-827c73e7529e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    title: 'Best tech companies to work for in 2021',
+    description: 'Here are the best tech companies to work for in 2021.',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    title: 'Most impactful tech innovations 2021',
+    description: 'Here are the most impactful tech innovations of 2021.',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    title: 'Tech trends to watch in 2022',
+    description: 'Here are the tech trends to watch in 2022.',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   // Add more items here
 ]);
-
 
 let isAddButtonClicked = ref(false);
 
@@ -176,5 +175,4 @@ const selectAndGoToRecipe = (item: typeof items.value[0]) => {
 .modal.show {
   transform: scale(1);
 }
-
 </style>
