@@ -11,22 +11,36 @@ const isActive = (routePath: string): boolean => {
   console.log(routePath)
   return route.path === routePath;
 };
-const darkMode = ref(isDarkTheme());
+const darkMode = ref(getDarkMode());
 
-function isDarkTheme() {
-  const body = document.querySelector('body');
-  const isDark = body?.classList.contains('dark');
-  return isDark;
+function getDarkMode() {
+   // Try to get the dark mode setting from localStorage
+   const storedDarkMode = localStorage.getItem('darkMode');
+
+   // If the setting exists, return it (converted to a boolean)
+   if (storedDarkMode !== null) {
+      return storedDarkMode === 'true';
+   }
+
+   // Otherwise, determine the setting based on the body class
+   const body = document.querySelector('body');
+   const isDark = body?.classList.contains('dark');
+   return isDark;
 }
 
 function toggleDarkMode() {
-  darkMode.value = !darkMode.value;
-  const body = document.querySelector('body');
-  body?.classList.toggle('dark', darkMode.value);
+   darkMode.value = !darkMode.value;
+
+   // Store the new setting in localStorage
+   localStorage.setItem('darkMode', darkMode.value.toString());
+
+   const body = document.querySelector('body');
+   body?.classList.toggle('dark', darkMode.value);
 }
 
 onMounted(() => {
-  toggleDarkMode();
+  const body = document.querySelector('body');
+  body?.classList.toggle('dark', darkMode.value);
   initFlowbite();
 });
 

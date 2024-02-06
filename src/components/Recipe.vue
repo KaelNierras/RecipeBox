@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="fixed inset-0 flex items-center justify-center" v-if="isAddButtonClicked">
+    <div class="modal fixed inset-0 flex items-center justify-center z-20" :class="{ 'show': isAddButtonClicked }" v-if="isAddButtonClicked">
     <div v-if="isAddButtonClicked" class="fixed inset-0 bg-black opacity-80 z-10"></div>
     <div class="fixed inset-0 flex items-center justify-center z-20" v-if="isAddButtonClicked">
       <Card class="w-[350px]">
@@ -123,9 +123,10 @@ const items = ref([
 let isAddButtonClicked = ref(false);
 
 const OpenModal = () => {
-  isAddButtonClicked.value = true;
+  setTimeout(() => {
+    isAddButtonClicked.value = true;
+  }, 300);
 };
-
 const closeAddRecipe = () => {
   isAddButtonClicked.value = false;
 };
@@ -165,3 +166,15 @@ const selectAndGoToRecipe = (item: typeof items.value[0]) => {
 
 
 </script>
+
+<style scoped>
+.modal {
+  transition: transform 0.3s ease-out;
+  transform: scale(0);
+}
+
+.modal.show {
+  transform: scale(1);
+}
+
+</style>

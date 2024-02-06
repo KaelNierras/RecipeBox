@@ -9,4 +9,5 @@
   import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
   const selectedRecipeStore = useSelectedRecipeStore();
   const selectedRecipe = selectedRecipeStore.item;
+  
   </script>
