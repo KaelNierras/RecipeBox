@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap">
 
-    <div v-for="(item, index) in items" :key="index"
+    <div v-for="(item, index) in items" :key="index"  @click="selectAndGoToRecipe(item)"
       class="m-3 w-96 h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-35  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
@@ -180,6 +180,17 @@ let selectedFile = ref<File | null>(null);
 
 const onFileChange = (e: Event) => {
   selectedFile.value = ((e.target as HTMLInputElement)?.files?.[0] || null);
+};
+
+import { useRouter } from 'vue-router';
+import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
+
+const router = useRouter();
+const selectedRecipeStore = useSelectedRecipeStore();
+
+const selectAndGoToRecipe = (item: typeof items.value[0]) => {
+  selectedRecipeStore.selectItem({ ...item, id: 'unique-id' });
+  router.push({ name: 'recipemain' });
 };
 
 
