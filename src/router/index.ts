@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
     name: 'loginandregister',
     component: LoginRegister,
     meta: {
-      requiresGuest: true,
+      requiresAuth: false,
     },
   },
   {
@@ -56,26 +56,23 @@ onAuthStateChanged(auth, () => {
 
 router.beforeEach((to, _from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const requiresGuest = to.matched.some(record => record.meta.requiresGuest);
-  const isAuthenticated = auth.currentUser != null;
 
-  if (!isAuthReady) {
-    // Wait for auth to initialize.
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe();
-      if ((requiresAuth && !user) || (requiresGuest && user)) {
-        next('/');
-      } else {
-        next();
-      }
-    });
-  } else {
-    if ((requiresAuth && !isAuthenticated) || (requiresGuest && isAuthenticated)) {
+  // Listen for changes in the authentication state
+  const unsubscribe = auth.onAuthStateChanged((user) => {
+    if (requiresAuth && !user) {
+      // If the route requires authentication and the user is not authenticated, redirect to login
       next('/');
+    } else if (!requiresAuth && user) {
+      // If the route does not require authentication and the user is authenticated, redirect to dashboard
+      next('/dashboard');
     } else {
+      // Allow access to the route
       next();
     }
-  }
+
+    // Stop listening for further changes
+    unsubscribe();
+  });
 });
 
 export default router;
