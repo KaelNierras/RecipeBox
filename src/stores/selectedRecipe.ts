@@ -6,8 +6,7 @@ interface Recipe {
   description: string;
   image: string;
 }
-
-export const useSelectedRecipeStore = defineStore({
+const useSelectedRecipeStore = defineStore({
   id: 'selectedRecipe',
   state: (): { item: Recipe | null } => ({
     item: JSON.parse(localStorage.getItem('selectedRecipe') || 'null'),
@@ -19,3 +18,5 @@ export const useSelectedRecipeStore = defineStore({
     },
   },
 });
+
+export default useSelectedRecipeStore;

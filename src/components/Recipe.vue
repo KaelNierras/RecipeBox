@@ -79,7 +79,7 @@ import {ref, watchEffect, onMounted } from 'vue';
 import { db } from '@/firebase';  // import the db constant
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from 'vue-router';
-import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
+import useSelectedRecipeStore from '@/stores/selectedRecipe';
 import {uploadBytes, getDownloadURL, ref as refStore } from 'firebase/storage';
 import { getStorage} from "firebase/storage";
 
@@ -182,7 +182,7 @@ const addRecipe = async () => {
 
     // Show an alert
     window.alert('Recipe added successfully.');
-    
+
     isAddButtonClicked.value = false;
   } catch (error) {
     console.error('Error adding recipe to Firebase:', error);

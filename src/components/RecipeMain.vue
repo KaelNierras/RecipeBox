@@ -10,7 +10,7 @@
     <div class="flex flex-col gap-9 w-full flex-grow bg-slate-200 dark:bg-gray-700 rounded-t-3xl -mt-8 z-30 p-10">
       <div class="flex flex-col md:flex-row justify-center gap-10 ">
         <IngredientCard />
-        <InstructionsCard />
+        <InstructionsCard v-if="!isLoading" :id="state.docId" />
       </div>
       <div class="flex justify-end items-end ">
 
@@ -62,11 +62,11 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { onMounted } from 'vue';
 import { collection, getDocs, where, doc, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
-import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
+import useSelectedRecipeStore from '@/stores/selectedRecipe';
 import IngredientCard from '@/components/custom_card/IngredientCard.vue'
 import InstructionsCard from '@/components/custom_card/InstructionsCard.vue'
 import { db } from '@/firebase';
@@ -76,58 +76,49 @@ import { useRouter } from 'vue-router';
 const selectedRecipeStore = useSelectedRecipeStore();
 const selectedRecipe = selectedRecipeStore.item;
 const bgImage = ref();
-const docId = ref(); // Store the document ID here
-const imageName = ref(); // Store the document ID here
+const state = reactive({
+  docId: '', // Changed from String to string
+  imageName: '', // Changed from String to string
+  // other state properties...
+});
 const router = useRouter();
 
 const showModal = ref(false);
+const isLoading = ref(true);
 
 onMounted(async () => {
   try {
-    // Set the title you want to match
     const selectedTitle = selectedRecipe?.title;
-
-    // Create a query with a condition to match the title
     const q = query(collection(db, 'recipe'), where('title', '==', selectedTitle));
-
-    // Fetch the data based on the query
     const querySnapshot = await getDocs(q);
 
-    // Check if there are matching documents
     if (querySnapshot.size > 0) {
       const matchingRecipe = querySnapshot.docs[0];
       const matchingRecipeData = matchingRecipe.data();
 
-      // Update the bgImage with the image URL from the matching recipe
       if (matchingRecipeData.image) {
         bgImage.value = matchingRecipeData.image;
       }
 
-      // Store the document ID
-      docId.value = matchingRecipe.id;
-      imageName.value = matchingRecipeData.imageName;
+      state.docId = matchingRecipe.id;
+      state.imageName = matchingRecipeData.imageName;
+      isLoading.value = false;
     } else {
       console.warn(`No matching recipe found for title: ${selectedTitle}`);
     }
   } catch (error) {
     console.error('Error fetching image from Firestore:', error);
-    // Handle error appropriately
+    isLoading.value = false;
   }
 });
 
 const deleteRecipe = async () => {
-  if (docId.value) {
-    // Delete the document from Firestore
-    await deleteDoc(doc(db, 'recipe', docId.value));
-
-    // Delete the image from Firebase Storage
+  if (state.docId) {
+    await deleteDoc(doc(db, 'recipe', state.docId)); // This should work now
     const storage = getStorage();
-    const imageRef = storageRef(storage, `/images/${imageName.value}`);
+    const imageRef = storageRef(storage, `/images/${state.imageName}`);
     await deleteObject(imageRef);
-
-    // Show an alert
     window.alert('Recipe deleted successfully.');
-
     router.push('/Recipe');
   }
 };
