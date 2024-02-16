@@ -2,7 +2,7 @@
   <div
     class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
     <div class="flex items-center justify-between mb-4">
-      <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Ingredient</h5>
+      <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Ingredients</h5>
       <button @click="toggleEditing"
         :class="{ 'text-green-600 dark:text-green-400': state.isEditing, 'text-blue-600 dark:text-blue-500': !state.isEditing }"
         class="text-sm font-medium hover:underline">
