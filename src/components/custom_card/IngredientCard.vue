@@ -33,13 +33,13 @@
     </div>
 
     <div v-if="state.isEditing" class="mb-4 flex gap-3 flex-col">
-      <input v-model="state.newingredient.title" type="text" placeholder="New ingredients title"
+      <input v-model="state.newingredient.title" type="text" placeholder="Title"
         class="border rounded p-2 w-full text-black ">
-      <input v-model="state.newingredient.details" type="text" placeholder="New ingredients details"
+      <input v-model="state.newingredient.details" type="text" placeholder="Details"
         class="border rounded p-2 w-full text-black ">
-        <input v-model="state.newingredient.price" type="text" placeholder="New ingredients price"
+        <input v-model="state.newingredient.price" type="text" placeholder="Price"
         class="border rounded p-2 w-full text-black ">
-      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add instruction</button>
+      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add ingredient</button>
     </div>
   </div>
 </template>

@@ -33,9 +33,9 @@
     </div>
 
     <div v-if="state.isEditing" class="mb-4 flex gap-3 flex-col">
-      <input v-model="state.newInstruction.title" type="text" placeholder="New instruction title"
+      <input v-model="state.newInstruction.title" type="text" placeholder="Title"
         class="border rounded p-2 w-full text-black ">
-      <input v-model="state.newInstruction.details" type="text" placeholder="New instruction details"
+      <input v-model="state.newInstruction.details" type="text" placeholder="Details"
         class="border rounded p-2 w-full text-black ">
       <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add instruction</button>
     </div>
