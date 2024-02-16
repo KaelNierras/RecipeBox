@@ -163,6 +163,8 @@ const addRecipe = async () => {
       description: newRecipe.value.description,
       image: imageURL,
       imageName: selectedFile.value.name,
+      ingredients: [],
+      instructions: [],
     });
 
     // Update the local recipes array with the new recipe's ID
