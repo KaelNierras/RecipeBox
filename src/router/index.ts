@@ -2,10 +2,16 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Dashboard from '../views/DashboardView.vue';
 import Recipe from '../views/RecipeView.vue';
 import RecipeMain from '../views/RecipeMainView.vue';
+import LoginRegister from '../views/LoginRegisterView.vue';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    name: 'loginandregister',
+    component: LoginRegister,
+  },
+  {
+    path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
   },
