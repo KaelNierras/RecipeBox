@@ -93,7 +93,7 @@ onMounted(() => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button>Login</Button>
+          <Button>Log in</Button>
         </CardFooter>
       </Card>
     </TabsContent>
@@ -115,8 +115,8 @@ onMounted(() => {
             <Input id="new" type="password" />
           </div>
         </CardContent>
-        <CardFooter class="flex flex-col gap-5 items-center">
-          <Button>Sign Up</Button>
+        <CardFooter class="flex flex-col gap-5 items-start">
+          <Button>Sign up</Button>
         </CardFooter>
       </Card>
     </TabsContent>
