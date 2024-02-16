@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col gap-9 w-full flex-grow bg-slate-200 dark:bg-gray-700 rounded-t-3xl -mt-8 z-30 p-10">
       <div class="flex flex-col md:flex-row justify-center gap-10 ">
-        <IngredientCard />
+        <IngredientCard v-if="!isLoading" :id="state.docId" />
         <InstructionsCard v-if="!isLoading" :id="state.docId" />
       </div>
       <div class="flex justify-end items-end ">
