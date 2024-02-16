@@ -77,11 +77,12 @@
 <script setup lang="ts">
 import {ref, watchEffect, onMounted } from 'vue';
 import { db } from '@/firebase';  // import the db constant
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs,query, where } from "firebase/firestore";
 import { useRouter } from 'vue-router';
 import useSelectedRecipeStore from '@/stores/selectedRecipe';
 import {uploadBytes, getDownloadURL, ref as refStore } from 'firebase/storage';
 import { getStorage} from "firebase/storage";
+import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 //Text Area
 import { Textarea } from '@/components/ui/textarea'
@@ -99,6 +100,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
+
 // Define an interface for your recipe data
 interface Recipe {
   id: string;
@@ -108,18 +110,28 @@ interface Recipe {
 }
 
 const recipes = ref(<Recipe[]>([]));
+const user_id = ref('');
+
+const auth = getAuth();
+setPersistence(auth, browserSessionPersistence);
 
 onMounted(async () => {
-  const querySnapshot = await getDocs(collection(db, "recipe"));
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
+  auth.onAuthStateChanged(async (user) => {
+    if (user !== null) {
+      user_id.value = user.uid;
+      const q = query(collection(db, "recipe"), where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
 
-    recipes.value.push({
-      id: doc.id,
-      title: data.title,
-      description: data.description,
-      image: data.image
-    });
+        recipes.value.push({
+          id: doc.id,
+          title: data.title,
+          description: data.description,
+          image: data.image
+        });
+      });
+    }
   });
 });
 
@@ -165,6 +177,7 @@ const addRecipe = async () => {
       imageName: selectedFile.value.name,
       ingredients: [],
       instructions: [],
+      userId: user_id.value,
     });
 
     // Update the local recipes array with the new recipe's ID

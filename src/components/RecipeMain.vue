@@ -14,6 +14,14 @@
       </div>
       <div class="flex justify-end items-end ">
 
+        <button @click="isFavorite" 
+                :class="{'bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4': state.favorite, 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800': !state.favorite}"
+                type="button">
+          <span class="material-symbols-outlined">
+            {{ state.favorite ? 'heart_check' : 'favorite' }}
+          </span>
+        </button>
+        
         <button @click="showModal = true" 
           class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           type="button">
@@ -64,7 +72,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { onMounted } from 'vue';
-import { collection, getDocs, where, doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, where, doc, deleteDoc,updateDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
 import useSelectedRecipeStore from '@/stores/selectedRecipe';
 import IngredientCard from '@/components/custom_card/IngredientCard.vue'
@@ -79,10 +87,10 @@ const bgImage = ref();
 const state = reactive({
   docId: '', // Changed from String to string
   imageName: '', // Changed from String to string
-  // other state properties...
+  favorite: false,
 });
-const router = useRouter();
 
+const router = useRouter();
 const showModal = ref(false);
 const isLoading = ref(true);
 
@@ -102,6 +110,7 @@ onMounted(async () => {
 
       state.docId = matchingRecipe.id;
       state.imageName = matchingRecipeData.imageName;
+      state.favorite = matchingRecipeData.isFavorite;
       isLoading.value = false;
     } else {
       console.warn(`No matching recipe found for title: ${selectedTitle}`);
@@ -122,4 +131,12 @@ const deleteRecipe = async () => {
     router.push('/Recipe');
   }
 };
+
+const isFavorite = async () => {
+  const recipeRef = doc(db, "recipe", state.docId)
+  state.favorite = !state.favorite
+  await updateDoc(recipeRef, {
+    isFavorite: state.favorite
+  })
+}
 </script>

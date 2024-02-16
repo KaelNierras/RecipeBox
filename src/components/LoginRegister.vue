@@ -17,6 +17,49 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { ref, onMounted } from 'vue'
+import { getAuth, GoogleAuthProvider, signInWithPopup,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const auth = getAuth();
+
+const email_login = ref('')
+const password_login = ref('')
+
+const email_signup = ref('')
+const password_signup = ref('')
+
+
+const signInWithEmail = async (email: string, password: string) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.alert('Successfully signed in with email and password');
+    router.push('/dashboard');
+  } catch (error) {
+    window.alert(`Error signing in with email and password: ${error}`);
+  }
+};
+
+const signUpWithEmail = async () => {
+  try {
+    await createUserWithEmailAndPassword(auth, email_signup.value, password_signup.value)
+    window.alert('Successfully signed up with email and password');
+    router.push('/dashboard');
+  } catch (error) {
+    window.alert(`Error signing up with email and password: ${error}`)
+  }
+}
+
+const signInWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    window.alert('Successfully signed in with Google');
+    router.push('/dashboard');
+  } catch (error) {
+    window.alert(`Error signing in with Google: ${error}`);
+  }
+};
 
 const darkMode = ref(getDarkMode());
 
@@ -75,7 +118,7 @@ onMounted(() => {
           <CardDescription>
             Login to your account to access your dashboard.
           </CardDescription>
-          <Button class="bg-white border  dark:bg-gray-800  border-gray-300 text-gray-700 hover:bg-gray-100">
+          <Button class="bg-white border  dark:bg-gray-800  border-gray-300 text-gray-700 hover:bg-gray-100" @click="signInWithGoogle ">
           <img src="/google.svg" alt="Google icon" class="inline-block mr-2 w-5"> 
           <p class="text-dark dark:text-white">Log in with Google</p>
           
@@ -84,16 +127,16 @@ onMounted(() => {
         <CardContent class="space-y-2">
           <p class="flex items-center justify-center">or</p>
           <div class="space-y-1">
-            <Label for="name">Email</Label>
-            <Input id="name" placeholder="Utilize your university-provided email." />
+            <Label for="email">Email</Label>
+            <Input v-model="email_login" placeholder="Utilize your university-provided email." />
           </div>
           <div class="space-y-1">
-            <Label for="username">Password</Label>
-            <Input id="username" />
+            <Label for="passwordLog">Password</Label>
+            <Input v-model="password_login" type="password"/>
           </div>
         </CardContent>
         <CardFooter>
-          <Button>Log in</Button>
+          <Button @click="() => signInWithEmail(email_login, password_login)">Log in</Button>
         </CardFooter>
       </Card>
     </TabsContent>
@@ -107,16 +150,16 @@ onMounted(() => {
         </CardHeader>
         <CardContent class="space-y-2">
           <div class="space-y-1">
-            <Label for="current">Name</Label>
-            <Input id="current" type="text" placeholder="Utilize your university-provided email." />
+            <Label for="email">Email</Label>
+            <Input v-model="email_signup" type="text" placeholder="Utilize your university-provided email." />
           </div>
           <div class="space-y-1">
-            <Label for="new">Password</Label>
-            <Input id="new" type="password" />
+            <Label for="password">Password</Label>
+            <Input v-model="password_signup" type="password" />
           </div>
         </CardContent>
         <CardFooter class="flex flex-col gap-5 items-start">
-          <Button>Sign up</Button>
+          <Button @click="signUpWithEmail">Sign up</Button>
         </CardFooter>
       </Card>
     </TabsContent>
