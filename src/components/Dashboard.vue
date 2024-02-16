@@ -86,7 +86,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class=" pt-20 px-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+  <div class=" pt-20 px-4 grid gap-1 md:grid-cols-2 lg:grid-cols-4">
     <Card>
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle class="text-sm font-medium">
@@ -124,10 +124,10 @@ watchEffect(() => {
       </CardContent>
     </Card>
   </div>
-  <div class="pt-20 px-4 flex flex-wrap flex-col">
+  <div class="pt-5 px-4 flex flex-wrap flex-col">
     <h3 class="text-lg font-bold p-2" v-if="recipes.length > 0">Favorites</h3>
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
-      class="m-3 w-96 h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
+      class="m-3 w-auto h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-35  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
       <div class="relative">
