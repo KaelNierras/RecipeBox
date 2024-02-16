@@ -1,7 +1,8 @@
 <template>
-  <div class="pt-20 px-4 flex flex-wrap">
 
-    <div v-for="(item, index) in items" :key="index"  @click="selectAndGoToRecipe(item)"
+
+  <div class="pt-20 px-4 flex flex-wrap">
+    <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
       class="m-3 w-96 h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-35  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
@@ -11,7 +12,7 @@
             {{ item.title }}
           </h5>
         </a>
-        <p class="mb-3 font-normal text-gray-800    dark:text-white">
+        <p class="mb-3 font-normal text-gray-800 h-28 dark:text-white">
           {{ item.description }}
         </p>
         <a href="#"
@@ -26,39 +27,41 @@
       </div>
     </div>
 
-    <div class="modal fixed inset-0 flex items-center justify-center z-20" :class="{ 'show': isAddButtonClicked }" v-if="isAddButtonClicked">
-    <div v-if="isAddButtonClicked" class="fixed inset-0 bg-black opacity-80 z-10"></div>
-    <div class="fixed inset-0 flex items-center justify-center z-20" v-if="isAddButtonClicked">
-      <Card class="w-[350px]">
-        <CardHeader>
-          <CardTitle>Create Recipe</CardTitle>
-          <CardDescription>Make Delicious Recipes</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form id="addRecipeForm" @submit.prevent="addRecipe">
-            <div class="grid items-center w-full gap-4">
-              <div class="flex flex-col space-y-1.5">
-                <Label for="title">Recipe Title</Label>
-                <Input id="title" v-model="newRecipe.title" placeholder="Title of Recipe" class="appearance-none box-border" />
+    <div class="modal fixed inset-0 flex items-center justify-center z-20" :class="{ 'show': isAddButtonClicked }"
+      v-if="isAddButtonClicked">
+      <div v-if="isAddButtonClicked" class="fixed inset-0 bg-black opacity-80 z-10"></div>
+      <div class="fixed inset-0 flex items-center justify-center z-20" v-if="isAddButtonClicked">
+        <Card class="w-[350px]">
+          <CardHeader>
+            <CardTitle>Create Recipe</CardTitle>
+            <CardDescription>Make Delicious Recipes</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form id="addRecipeForm" @submit.prevent="addRecipe">
+              <div class="grid items-center w-full gap-4">
+                <div class="flex flex-col space-y-1.5">
+                  <Label for="title">Recipe Title</Label>
+                  <Input id="title" v-model="newRecipe.title" placeholder="Title of Recipe"
+                    class="appearance-none box-border" />
+                </div>
+                <div class="flex flex-col space-y-1.5">
+                  <Label for="description">Description</Label>
+                  <Textarea id="description" v-model="newRecipe.description" placeholder="Write a Short Description" class="appearance-none box-border" />
+                </div>
+                <div class="flex flex-col space-y-1.5">
+                  <Label for="image">Cover Photo</Label>
+                  <input id="image" type="file" @change="onFileChange" class="appearance-none box-border" />
+                </div>
               </div>
-              <div class="flex flex-col space-y-1.5">
-                <Label for="description">Description</Label>
-                <Input id="description" v-model="newRecipe.description" placeholder="Description of Recipe" class="appearance-none box-border" />
-              </div>
-              <div class="flex flex-col space-y-1.5">
-                <Label for="image">Cover Photo</Label>
-                <input id="image" type="file" @change="onFileChange" class="appearance-none box-border" />
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter class="flex justify-between px-6 pb-6">
-          <Button variant="outline" @click="closeAddRecipe">
-            Cancel
-          </Button>
-          <Button type="submit" form="addRecipeForm">Add</Button>
-        </CardFooter>
-      </Card>
+            </form>
+          </CardContent>
+          <CardFooter class="flex justify-between px-6 pb-6">
+            <Button variant="outline" @click="closeAddRecipe">
+              Cancel
+            </Button>
+            <Button type="submit" form="addRecipeForm">Add</Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
 
@@ -72,7 +75,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref, watchEffect, onMounted } from 'vue';
+import { db } from '@/firebase';  // import the db constant
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { useRouter } from 'vue-router';
+import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
+import {uploadBytes, getDownloadURL, ref as refStore } from 'firebase/storage';
+import { getStorage} from "firebase/storage";
+
+//Text Area
+import { Textarea } from '@/components/ui/textarea'
+
+//Card
 import {
   Card,
   CardContent,
@@ -85,39 +99,29 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
-const items = ref([
-  {
-    title: 'Noteworthy technology acquisitions 2021',
-    description: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Top tech startups 2021',
-    description: 'Here are the most promising tech startups of 2021.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Innovative tech products 2021',
-    description: 'Here are the most innovative tech products released in 2021.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Best tech companies to work for in 2021',
-    description: 'Here are the best tech companies to work for in 2021.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Most impactful tech innovations 2021',
-    description: 'Here are the most impactful tech innovations of 2021.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  {
-    title: 'Tech trends to watch in 2022',
-    description: 'Here are the tech trends to watch in 2022.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  },
-  // Add more items here
-]);
+// Define an interface for your recipe data
+interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+const recipes = ref(<Recipe[]>([]));
+
+onMounted(async () => {
+  const querySnapshot = await getDocs(collection(db, "recipe"));
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+
+    recipes.value.push({
+      id: doc.id,
+      title: data.title,
+      description: data.description,
+      image: data.image
+    });
+  });
+});
 
 let isAddButtonClicked = ref(false);
 
@@ -133,18 +137,60 @@ const closeAddRecipe = () => {
 let newRecipe = ref({
   title: '',
   description: '',
-  image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  image: ''
 });
 
-const addRecipe = () => {
-  items.value.push(newRecipe.value);
-  newRecipe.value = {
-    title: '',
-    description: '',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  };
-  isAddButtonClicked.value = false;
+const addRecipe = async () => {
+  try {
+    // Check if selectedFile is not null before accessing its name property
+    if (!selectedFile.value) {
+      throw new Error('No file selected.');
+    }
+
+    // Create a root reference
+    const storage = getStorage();
+
+    // Upload the image to Firebase Storage
+    const storageRef = refStore(storage, 'images/' + selectedFile.value.name);
+    await uploadBytes(storageRef, selectedFile.value);
+
+    // Get the download URL for the uploaded image
+    const imageURL = await getDownloadURL(storageRef);
+
+    // Add the new recipe to the Firebase collection with the image URL
+    const recipeRef = await addDoc(collection(db, 'recipe'), {
+      title: newRecipe.value.title,
+      description: newRecipe.value.description,
+      image: imageURL,
+      imageName: selectedFile.value.name,
+    });
+
+    // Update the local recipes array with the new recipe's ID
+    recipes.value.push({
+      id: recipeRef.id,
+      title: newRecipe.value.title,
+      description: newRecipe.value.description,
+      image: imageURL,
+    });
+
+    // Reset the newRecipe values and close the modal
+    newRecipe.value = {
+      title: '',
+      description: '',
+      image: '',
+    };
+
+    // Show an alert
+    window.alert('Recipe added successfully.');
+    
+    isAddButtonClicked.value = false;
+  } catch (error) {
+    console.error('Error adding recipe to Firebase:', error);
+    // Handle error appropriately
+  }
 };
+
+
 
 let selectedFile = ref<File | null>(null);
 
@@ -152,16 +198,18 @@ const onFileChange = (e: Event) => {
   selectedFile.value = ((e.target as HTMLInputElement)?.files?.[0] || null);
 };
 
-import { useRouter } from 'vue-router';
-import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
-
 const router = useRouter();
 const selectedRecipeStore = useSelectedRecipeStore();
 
-const selectAndGoToRecipe = (item: typeof items.value[0]) => {
+const selectAndGoToRecipe = (item: typeof recipes.value[0]) => {
   selectedRecipeStore.selectItem({ ...item, id: 'unique-id' });
   router.push({ name: 'recipemain' });
 };
+
+watchEffect(() => {
+  localStorage.setItem('items', JSON.stringify(recipes.value));
+});
+
 
 
 </script>

@@ -7,6 +7,7 @@ import Sidebar from '@/components/Sidebar.vue';
     <Sidebar />
   </div>
 </template>
+
 <style scoped>
 
 </style>
