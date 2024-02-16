@@ -21,11 +21,11 @@
                 {{ ingredient.title }}
               </p>
               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                {{ ingredient.details }}
+                {{ `${ingredient.quantity} x ${ingredient.price} ${ingredient.details}` }}
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              {{ '₱' + ingredient.price }}
+              {{ '₱' + totalCost }}
             </div>
           </div>
         </li>
@@ -37,15 +37,19 @@
         class="border rounded p-2 w-full text-black ">
       <input v-model="state.newingredient.details" type="text" placeholder="Details"
         class="border rounded p-2 w-full text-black ">
-        <input v-model="state.newingredient.price" type="text" placeholder="Price"
+      <div class="flex flex-row">
+        <input v-model="state.newingredient.quantity" type="number" placeholder="Quantity"
         class="border rounded p-2 w-full text-black ">
+        <input v-model="state.newingredient.price" type="number" placeholder="Price"
+        class="border rounded p-2 w-full text-black ">
+      </div>
       <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add ingredient</button>
     </div>
   </div>
 </template>
   
 <script setup lang="ts">
-import { watchEffect, reactive } from 'vue'
+import { watchEffect, reactive, computed } from 'vue'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 
@@ -56,10 +60,15 @@ interface Props {
 const props = defineProps<Props>()
 
 const state = reactive({
-  ingredients: [] as { title: String, details: String, price: string}[],
-  newingredient: { title: '', details: '', price: ''},
+  ingredients: [] as { title: String, details: String, price: number, quantity: number}[],
+  newingredient: { title: '', details: '', price: '', quantity: ''},
   isEditing: false
 });
+
+const totalCost = computed(() => {
+  return state.ingredients.reduce((total, ingredient) => total + (ingredient.quantity * ingredient.price), 0);
+})
+
 
 watchEffect(async () => {
   if (props.id) {
@@ -100,11 +109,13 @@ const addInstruction = () => {
     state.ingredients.push({
       title: state.newingredient.title,
       details: state.newingredient.details,
-      price: state.newingredient.price,
+      price: Number(state.newingredient.price),
+      quantity: Number(state.newingredient.quantity),
     });
     state.newingredient.title = ''; // Clear the input field after adding the instruction
     state.newingredient.details = ''; // Clear the input field after adding the instruction
     state.newingredient.price = ''; // Clear the input field after adding the instruction
+    state.newingredient.quantity = ''; // Clear the input field after adding the instruction
   }
 };
 </script>
