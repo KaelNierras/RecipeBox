@@ -34,7 +34,6 @@
   
   <script setup lang="ts">
   import {ref} from 'vue'
-  import { Textarea } from '@/components/ui/textarea'
   const customers = ref([
     { name: 'Neil Sims', email: 'email@windster.com', amount: '$320' },
     { name: 'Bonnie Green', email: 'email@windster.com', amount: '$3467' },
