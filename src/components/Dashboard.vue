@@ -128,15 +128,15 @@ watchEffect(() => {
     <h3 class="text-lg font-bold p-2" v-if="recipes.length > 0">Favorites</h3>
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
       class="m-3 w-auto h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
-      <div class="absolute inset-0 bg-black opacity-35  dark:opacity-40"
+      <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
       <div class="relative">
         <a href="#">
-          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-800  dark:text-white    ">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-white  dark:text-white    ">
             {{ item.title }}
           </h5>
         </a>
-        <p class="mb-3 font-normal text-gray-800 h-28 dark:text-white">
+        <p class="mb-3 font-normal text-white h-28 dark:text-white">
           {{ item.description }}
         </p>
         <a href="#"
