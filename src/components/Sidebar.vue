@@ -112,9 +112,7 @@ onMounted(() => {
                <!-- <a href="/" class="flex ms-2 md:me-24">
                   <img :src="darkMode ? '/logo_dark.png' : '/logo_light.png'" class="h-9 me-3" alt="VoteHub Logo" />
                </a> -->
-               <span class="material-symbols-outlined mx-2">
-                  restaurant
-               </span>
+               <img :src="darkMode ? '/recipes-light.svg' : '/recipes.svg'" class="h-6 me-3" alt="RecipeBox Logo" />
                <div class="text-2xl font-bold">Recipe Box</div>
             </div>
             <div class="flex items-center">
