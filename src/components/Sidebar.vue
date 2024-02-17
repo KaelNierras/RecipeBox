@@ -4,10 +4,9 @@ import { initFlowbite } from 'flowbite'
 import { RouterView } from 'vue-router';
 import { Button } from '@/components/ui/button'
 import { useRoute, useRouter } from 'vue-router';
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const auth = getAuth();
-const user = auth.currentUser;
 
 const user_name = ref('');
 const email = ref('');
@@ -50,23 +49,45 @@ const signOut = async () => {
    try {
       await auth.signOut();
       router.push('/');
+      localStorage.removeItem('user_name');
+      localStorage.removeItem('email');
+      localStorage.removeItem('photoURL');
    } catch (error) {
       window.alert(`Error signing in with email and password: ${(error as any).message}`);
    }
 };
-
 onMounted(() => {
    const body = document.querySelector('body');
    body?.classList.toggle('dark', darkMode.value);
    initFlowbite();
 
-   if (user !== null) {
-      // The user object has basic properties such as display name, email, etc.
-      user_name.value = user.displayName ?? '';
-      email.value = user.email ?? '';
-      photoURL.value = user.photoURL ?? '';
-   }
+   onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser !== null) {
+         // The user object has basic properties such as display name, email, etc.
+         let storedUserName = localStorage.getItem('user_name');
+         let storedEmail = localStorage.getItem('email');
+         let storedPhotoURL = localStorage.getItem('photoURL');
 
+         if (storedUserName === null) {
+            storedUserName = currentUser.displayName ?? '';
+            localStorage.setItem('user_name', storedUserName);
+         }
+
+         if (storedEmail === null) {
+            storedEmail = currentUser.email ?? '';
+            localStorage.setItem('email', storedEmail);
+         }
+
+         if (storedPhotoURL === null) {
+            storedPhotoURL = currentUser.photoURL ?? '';
+            localStorage.setItem('photoURL', storedPhotoURL);
+         }
+
+         user_name.value = storedUserName;
+         email.value = storedEmail;
+         photoURL.value = storedPhotoURL;
+      }
+   });
 });
 
 </script>
