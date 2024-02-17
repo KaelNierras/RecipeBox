@@ -25,7 +25,7 @@
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              {{ '₱' + totalCost }}
+              {{ '₱' + (ingredient.quantity * ingredient.price).toFixed(2) }}
             </div>
           </div>
         </li>
@@ -64,11 +64,6 @@ const state = reactive({
   newingredient: { title: '', details: '', price: '', quantity: ''},
   isEditing: false
 });
-
-const totalCost = computed(() => {
-  return state.ingredients.reduce((total, ingredient) => total + (ingredient.quantity * ingredient.price), 0);
-})
-
 
 watchEffect(async () => {
   if (props.id) {
