@@ -49,7 +49,7 @@
 </template>
   
 <script setup lang="ts">
-import { watchEffect, reactive, computed } from 'vue'
+import { watchEffect, reactive } from 'vue'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 
