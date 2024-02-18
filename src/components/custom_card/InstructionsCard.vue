@@ -25,7 +25,7 @@
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              1
+              {{ index + 1 }}
             </div>
           </div>
         </li>
