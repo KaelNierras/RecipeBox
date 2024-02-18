@@ -6,7 +6,13 @@ interface Recipe {
   description: string;
   image: string;
 }
-const useSelectedRecipeStore = defineStore({
+
+interface TotalAmount {
+  id: string;
+  amount: number;
+}
+
+ export const useSelectedRecipeStore = defineStore({
   id: 'selectedRecipe',
   state: (): { item: Recipe | null } => ({
     item: JSON.parse(localStorage.getItem('selectedRecipe') || 'null'),
@@ -19,4 +25,15 @@ const useSelectedRecipeStore = defineStore({
   },
 });
 
-export default useSelectedRecipeStore;
+ export const useTotalIngredientAmount = defineStore({
+  id: 'TotalIngredientAmount',
+  state: (): { item: TotalAmount | null } => ({
+    item: JSON.parse(localStorage.getItem('TotalIngredientAmount') || 'null'),
+  }),
+  actions: {
+    selectItem(item: TotalAmount) {
+      this.item = item;
+      localStorage.setItem('TotalIngredientAmount', JSON.stringify(item));
+    },
+  },
+});

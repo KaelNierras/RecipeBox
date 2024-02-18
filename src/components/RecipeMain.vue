@@ -11,6 +11,7 @@
       <div class="flex flex-col md:flex-row justify-center gap-10 ">
         <IngredientCard v-if="!isLoading" :id="state.docId" />
         <InstructionsCard v-if="!isLoading" :id="state.docId" />
+        <SummaryCard v-if="!isLoading" :id="state.docId" />
       </div>
       <div class="flex justify-end items-end ">
 
@@ -74,9 +75,10 @@ import { ref, reactive } from 'vue';
 import { onMounted } from 'vue';
 import { collection, getDocs, where, doc, deleteDoc,updateDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
-import useSelectedRecipeStore from '@/stores/selectedRecipe';
+import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
 import IngredientCard from '@/components/custom_card/IngredientCard.vue'
 import InstructionsCard from '@/components/custom_card/InstructionsCard.vue'
+import SummaryCard from '@/components/custom_card/SummaryCard.vue'
 import { db } from '@/firebase';
 import { query } from 'firebase/firestore';
 import { useRouter } from 'vue-router';

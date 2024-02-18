@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import useSelectedRecipeStore from '@/stores/selectedRecipe'
+import {useSelectedRecipeStore} from '@/stores/selectedRecipe'
 import { useRouter } from 'vue-router'
 
 interface Recipe {
