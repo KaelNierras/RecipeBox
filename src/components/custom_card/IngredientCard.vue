@@ -25,7 +25,7 @@
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              {{ '₱' + (ingredient.quantity * ingredient.price).toFixed(2) }}
+              {{ '₱' + ingredient.quantity * ingredient.price}}
             </div>
           </div>
         </li>
@@ -49,9 +49,10 @@
 </template>
   
 <script setup lang="ts">
-import { watchEffect, reactive } from 'vue'
+import { watchEffect, reactive, computed } from 'vue'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
+import {useTotalIngredientAmount} from  '@/stores/TotalIngredientAmount'
 
 interface Props {
   id: string
@@ -77,7 +78,23 @@ watchEffect(async () => {
       console.log('No such document!')
     }
   }
+  updateTotalAmount();
 })
+
+const totalCost = computed(() => {
+  return state.ingredients.reduce((total: number, ingredient: { quantity: number; price: number; }) => total + ingredient.quantity * ingredient.price, 0);
+});
+
+const selectedRecipeStore = useTotalIngredientAmount();
+
+const updateTotalAmount = () => {
+  //console.log('totalCost.value', totalCost.value);
+  selectedRecipeStore.totalAmount({
+    id: 'unique-id',
+    amount: totalCost.value
+  });
+};
+
 
 const deleteCustomer = (index: number) => {
   state.ingredients.splice(index, 1);
@@ -96,6 +113,7 @@ const toggleEditing = () => {
   state.isEditing = !state.isEditing;
   if (!state.isEditing) {
     updateInstructions();
+    updateTotalAmount();
   }
 };
 

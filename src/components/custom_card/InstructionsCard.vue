@@ -18,7 +18,7 @@
               class="text-red-500 hover:text-red-700 mr-4">Delete</button>
             <div class="flex-1 min-w-0 ms-4">
               <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                {{ instruction.title }}
+                {{ `${instruction.title} (${instruction.time} mins)` }}
               </p>
               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
                 {{ instruction.details }}
@@ -37,15 +37,18 @@
         class="border rounded p-2 w-full text-black ">
       <input v-model="state.newInstruction.details" type="text" placeholder="Details"
         class="border rounded p-2 w-full text-black ">
+      <input v-model="state.newInstruction.time" type="number" placeholder="Time in Minutes"
+        class="border rounded p-2 w-full text-black ">
       <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add instruction</button>
     </div>
   </div>
 </template>
   
 <script setup lang="ts">
-import { watchEffect, reactive } from 'vue'
+import { watchEffect, reactive, computed } from 'vue'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
+import {useTotalCookingTime} from  '@/stores/TotalCookingTime'
 
 interface Props {
   id: string
@@ -54,8 +57,8 @@ interface Props {
 const props = defineProps<Props>()
 
 const state = reactive({
-  instructions: [] as { title: String, details: String}[],
-  newInstruction: { title: '', details: ''},
+  instructions: [] as { title: String, details: String, time: number}[],
+  newInstruction: { title: '', details: '', time: '' as any},
   isEditing: false
 });
 
@@ -71,7 +74,22 @@ watchEffect(async () => {
       console.log('No such document!')
     }
   }
+  updateTotalTime();
 })
+
+const totalTime = computed(() => {
+  return state.instructions.reduce((total: number, instructions: { time: number}) => total + instructions.time , 0);
+});
+
+const selectedRecipeStore = useTotalCookingTime();
+
+const updateTotalTime = () => {
+  selectedRecipeStore.totalTime({
+    id: 'unique-id',
+    time: totalTime.value
+  });
+};
+
 
 const deleteCustomer = (index: number) => {
   state.instructions.splice(index, 1);
@@ -90,6 +108,7 @@ const toggleEditing = () => {
   state.isEditing = !state.isEditing;
   if (!state.isEditing) {
     updateInstructions();
+    updateTotalTime();
   }
 };
 
@@ -98,9 +117,11 @@ const addInstruction = () => {
     state.instructions.push({
       title: state.newInstruction.title,
       details: state.newInstruction.details,
+      time: state.newInstruction.time,
     });
     state.newInstruction.title = ''; // Clear the input field after adding the instruction
     state.newInstruction.details = ''; // Clear the input field after adding the instruction
+    state.newInstruction.time; // Clear the input field after adding the instruction
   }
 };
-</script>
+</script>@/stores/TotalCookingTime
