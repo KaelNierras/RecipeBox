@@ -23,7 +23,7 @@
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              {{ TotalAmount?.amount }}
+              {{'₱ ' + TotalAmount?.amount }}
             </div>
           </div>  
         </li>
@@ -38,7 +38,7 @@
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              {{ TotalTime?.time }}
+              {{ TotalTime?.time +' mins'}}
             </div>
           </div>  
         </li>
