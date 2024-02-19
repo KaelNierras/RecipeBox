@@ -23,8 +23,8 @@ interface Recipe {
 
 const auth = getAuth()
 setPersistence(auth, browserSessionPersistence);
-const recipeCount = ref(0)
-const favoriteCount = ref(0)
+const recipeCount = ref('')
+const favoriteCount = ref('')
 const currentDate = ref('')
 const recipes = ref(<Recipe[]>([]));
 const user_id = ref('');
@@ -57,7 +57,7 @@ onMounted(async () => {
           image: data.image
         });
       });
-      recipeCount.value = querySnapshot.size
+      recipeCount.value = querySnapshot.size.toString();
       localStorage.setItem('recipeCount', recipeCount.value.toString());
     }
     recipes.value = [];
@@ -75,7 +75,7 @@ onMounted(async () => {
           image: data.image
         });
       });
-      favoriteCount.value = querySnapshot.docs.filter(doc => doc.data().isFavorite).length
+      favoriteCount.value = querySnapshot.docs.filter(doc => doc.data().isFavorite).length.toString();
     }
 
   });
@@ -142,7 +142,7 @@ watchEffect(() => {
       </CardContent>
     </Card>
   </div>
-  <div class="pt-5 px-4 flex flex-wrap flex-col gap-4" v-if="recipeCount == 0">
+  <div class="pt-5 px-4 flex flex-wrap flex-col gap-4" v-if="recipeCount == '0'">
     
     <h1 class="text-gray-600 dark:text-gray-300 text-3xl sm:text-2xl md:text-4xl font-semibold">Create your First Recipe!</h1>
     <router-link :to="{ path: '/recipe'}"
