@@ -7,8 +7,8 @@
       <div class="absolute inset-0 bg-black opacity-50"></div>
       <div class="absolute top-0 left-0 p-7">
         <div v-if="!isEditing">
-          <div class="flex flex-row justify-center items-center">
-            <span class="material-symbols-outlined text-blue-600 hover:cursor-pointer" @click="isEditing = true">
+          <div class="flex flex-row justify-center items-center gap-2">
+            <span class="material-symbols-outlined bg-green-700 p-1 rounded text-white hover:cursor-pointer" @click="isEditing = true">
               edit
             </span>
             <h1 class="text-3xl sm:text-5xl font-bold text-white">{{ selectedRecipe?.title }}</h1>
@@ -17,8 +17,8 @@
           <p class="pt-2 max-w-md text-white">{{ selectedRecipe?.description }}</p>
         </div>
         <div class="flex flex-col" v-if="isEditing">
-          <div class="flex flex-row justify-center items-center">
-            <span class="material-symbols-outlined text-blue-600 hover:cursor-pointer" @click="updateTitleandDescription">
+          <div class="flex flex-row justify-center items-center gap-2">
+            <span class="material-symbols-outlined bg-green-700 p-1 rounded text-white hover:cursor-pointer" @click="updateTitleandDescription">
               edit
             </span>
             <input v-model="title" type="text" placeholder="Quantity" class="border rounded p-2 w-full text-black ">
