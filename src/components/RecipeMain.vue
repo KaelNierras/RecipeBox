@@ -7,7 +7,7 @@
       <div class="absolute inset-0 bg-black opacity-50"></div>
       <div class="absolute top-0 left-0 p-7">
         <div v-if="!isEditing">
-          <div class="flex flex-row justify-center items-center gap-2">
+          <div class="flex flex-row justify-start items-center gap-2">
             <span class="material-symbols-outlined bg-green-700 p-1 rounded text-white hover:cursor-pointer" @click="isEditing = true">
               edit
             </span>
