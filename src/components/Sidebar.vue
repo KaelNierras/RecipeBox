@@ -11,6 +11,7 @@ const auth = getAuth();
 const user_name = ref('');
 const email = ref('');
 const photoURL = ref('');
+
 const route = useRoute();
 const router = useRouter();
 
@@ -54,8 +55,8 @@ const signOut = async () => {
       localStorage.removeItem('photoURL');
       localStorage.removeItem('hasShownToast');
       localStorage.removeItem('hasShownToastOut');
-      localStorage.removeItem('hasShownToastDeleted');
-      localStorage.removeItem('hasShownToastAdded');
+      localStorage.removeItem('currentUserId');
+
    } catch (error) {
       window.alert(`Error signing in with email and password: ${(error as any).message}`);
    }
@@ -72,6 +73,7 @@ onMounted(() => {
          let storedEmail = localStorage.getItem('email');
          let storedPhotoURL = localStorage.getItem('photoURL');
 
+         localStorage.setItem('currentUserId', currentUser.uid ?? '');
          if (storedUserName === null) {
             storedUserName = currentUser.displayName ?? '';
             localStorage.setItem('user_name', storedUserName);
@@ -90,6 +92,8 @@ onMounted(() => {
          user_name.value = storedUserName;
          email.value = storedEmail;
          photoURL.value = storedPhotoURL;
+
+
       }
    });
 });

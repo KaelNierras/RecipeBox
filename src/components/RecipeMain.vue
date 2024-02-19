@@ -104,7 +104,7 @@ const isLoading = ref(true);
 onMounted(async () => {
   try {
     const selectedTitle = selectedRecipe?.title;
-    const q = query(collection(db, 'recipe'), where('title', '==', selectedTitle));
+    const q = query(collection(db, 'recipe'), where('title', '==', selectedTitle), where('userId', '==', localStorage.getItem('currentUserId')));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.size > 0) {
