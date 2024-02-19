@@ -108,7 +108,7 @@ watchEffect(() => {
     <Card>
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle class="text-sm font-medium">
-          Total Number of Receipes
+          Total Number of Recipes
         </CardTitle>
         <span class="material-symbols-outlined">
           menu_book
