@@ -126,7 +126,7 @@ watchEffect(() => {
     <Card>
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle class="text-sm font-medium">
-          Total Number of Favorite
+          Total Number of Favorites
         </CardTitle>
         <span class="material-symbols-outlined">
           favorite
