@@ -45,7 +45,9 @@
         <input v-model="state.newingredient.price" type="number" placeholder="Price"
         class="border rounded p-2 w-full text-black ">
       </div>
-      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add ingredient</button>
+      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">
+        {{ state.isAdding ? 'Edit ingredient' : 'Add ingredient' }}
+      </button>
     </div>
   </div>
 </template>
@@ -66,6 +68,7 @@ const state = reactive({
   ingredients: [] as { title: string, details: string, price: number, quantity: number}[],
   newingredient: { title: '', details: '', price: '', quantity: ''},
   isEditing: false,
+  isAdding: false,
   editingIndex: null as number | null
 });
 
@@ -117,10 +120,12 @@ const toggleEditing = () => {
   if (!state.isEditing) {
     updateInstructions();
     updateTotalAmount();
+    state.isAdding = false;
   }
 };
 
 const editIngredient = (index: number) => {
+  state.isAdding = true;
   state.newingredient = {
     ...state.ingredients[index],
     price: state.ingredients[index].price.toString(),

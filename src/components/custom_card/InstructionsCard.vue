@@ -42,7 +42,9 @@
         class="border rounded p-2 w-full text-black ">
       <input v-model="state.newInstruction.time" type="number" placeholder="Time in Minutes"
         class="border rounded p-2 w-full text-black ">
-      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Add instruction</button>
+      <button @click="addInstruction" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">
+        {{ state.isAdding ? 'Edit instruction' : 'Add instruction' }}
+      </button>
     </div>
   </div>
 </template>
@@ -63,6 +65,7 @@ const state = reactive({
   instructions: [] as { title: string, details: string, time: number}[],
   newInstruction: { title: '', details: '', time: '' as any},
   isEditing: false,
+  isAdding: false,
   editingIndex: null as number | null
 });
 
@@ -108,6 +111,7 @@ const toggleEditing = () => {
   if (!state.isEditing) {
     updateInstructions();
     updateTotalTime();
+    state.isAdding = false;
   }
 };
 
@@ -116,6 +120,7 @@ const deleteInstruction = (index: number) => {
 };
 
 const editInstruction = (index: number) => {
+  state.isAdding = true;
   state.newInstruction = { ...state.instructions[index] };
   state.editingIndex = index;
 };
