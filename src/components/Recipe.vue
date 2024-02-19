@@ -1,14 +1,14 @@
 <template>
   <div class="pt-20 px-4 flex flex-wrap">
-    <div class="flex flex-col justify-center text-center w-full">
+    <div class="flex flex-col justify-center text-center w-full" v-if="getrecipeCount === '0'">
       <h1 class="text-gray-400 dark:text-gray-700 text-2xl sm:text-2xl md:text-3xl font-semibold">
-"Oops! No recipe found!"</h1>
-  <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-7xl">
-sentiment_very_dissatisfied
-</span>
+        "Oops! No recipe found!"</h1>
+      <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-7xl">
+        sentiment_very_dissatisfied
+      </span>
 
     </div>
-  
+
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
       class="m-3 w-96 h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
@@ -83,7 +83,7 @@ sentiment_very_dissatisfied
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect, onMounted, computed } from 'vue';
 import { db } from '@/firebase';  // import the db constant
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from 'vue-router';
@@ -119,6 +119,11 @@ interface Recipe {
 
 const recipes = ref(<Recipe[]>([]));
 const user_id = ref('');
+
+const getrecipeCount = computed(() => {
+  console.log(localStorage.getItem('recipeCount'));
+  return (localStorage.getItem('recipeCount') ?? '0');
+});
 
 const auth = getAuth();
 setPersistence(auth, browserSessionPersistence);
