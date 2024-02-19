@@ -9,8 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {useSelectedRecipeStore} from '@/stores/selectedRecipe'
+import { useSelectedRecipeStore } from '@/stores/selectedRecipe'
 import { useRouter } from 'vue-router'
+import ToastNotification from './ToastNotification.vue';
+
 
 interface Recipe {
   id: string;
@@ -27,11 +29,23 @@ const currentDate = ref('')
 const recipes = ref(<Recipe[]>([]));
 const user_id = ref('');
 
+const showToast = ref(false);
+const toastMessage = ref('');
+
 onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
-    if (user !== null) {
+    if (user !== null && user.uid !== user_id.value) {
       user_id.value = user.uid;
-      const q = query(collection(db, "recipe"), where("userId", "==", user.uid), );
+
+      if (localStorage.getItem('hasShownToast') !== 'true') {
+        toastMessage.value = 'Successfully Logged In!';
+        showToast.value = true;
+        setTimeout(() => {
+          showToast.value = false;
+        }, 3000);
+        localStorage.setItem('hasShownToast', 'true');
+      }
+      const q = query(collection(db, "recipe"), where("userId", "==", user.uid),);
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -45,10 +59,10 @@ onMounted(async () => {
       });
       recipeCount.value = querySnapshot.size
     }
-    recipes.value =[];
+    recipes.value = [];
     if (user !== null) {
       user_id.value = user.uid;
-      const q = query(collection(db, "recipe"), where("userId", "==", user.uid),  where("isFavorite", "==", true));
+      const q = query(collection(db, "recipe"), where("userId", "==", user.uid), where("isFavorite", "==", true));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -62,7 +76,7 @@ onMounted(async () => {
       });
       favoriteCount.value = querySnapshot.docs.filter(doc => doc.data().isFavorite).length
     }
-    
+
   });
   getCurrentDate();
 });
@@ -86,6 +100,9 @@ watchEffect(() => {
 </script>
 
 <template>
+  <div class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+    <ToastNotification :show="showToast" :message="toastMessage" />
+  </div>
   <div class=" pt-20 px-4 grid gap-1 md:grid-cols-2 lg:grid-cols-4">
     <Card>
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -93,7 +110,7 @@ watchEffect(() => {
           Total Number of Receipes
         </CardTitle>
         <span class="material-symbols-outlined">
-        menu_book
+          menu_book
         </span>
       </CardHeader>
       <CardContent>
@@ -111,7 +128,7 @@ watchEffect(() => {
           Total Number of Favorite
         </CardTitle>
         <span class="material-symbols-outlined">
-        favorite
+          favorite
         </span>
       </CardHeader>
       <CardContent>
@@ -151,7 +168,6 @@ watchEffect(() => {
       </div>
     </div>
   </div>
-
 </template>
 
 

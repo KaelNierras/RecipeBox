@@ -1,4 +1,7 @@
 <template>
+  <div class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+          <ToastNotification :show="showToast" :message="toastMessage" />
+  </div>
   <div class="pt-14 w-full min-h-screen flex flex-col">
     <div class="w-full md:h-52 h-52 relative bg-cover bg-center" :style="{ backgroundImage: `url(${bgImage})` }">
       <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -11,18 +14,19 @@
       <div class="flex flex-col md:flex-row justify-center gap-10 ">
         <IngredientCard v-if="!isLoading" :id="state.docId" />
         <InstructionsCard v-if="!isLoading" :id="state.docId" />
-        <SummaryCard v-if="!isLoading" :id="state.docId" />
+        <SummaryCard />
       </div>
       <div class="flex justify-end items-end ">
 
-        <button @click="isFavorite" 
+        <button @click="isFavorite()"
                 :class="{' bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 text-white': state.favorite, 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800': !state.favorite}"
                 type="button">
           <span class="material-symbols-outlined">
             {{ state.favorite ? 'heart_check' : 'favorite' }}
           </span>
         </button>
-        
+       
+                
         <button @click="showModal = true" 
           class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           type="button">
@@ -82,6 +86,7 @@ import SummaryCard from '@/components/custom_card/SummaryCard.vue'
 import { db } from '@/firebase';
 import { query } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
+import ToastNotification from './ToastNotification.vue';
 
 const selectedRecipeStore = useSelectedRecipeStore();
 const selectedRecipe = selectedRecipeStore.item;
@@ -136,9 +141,22 @@ const deleteRecipe = async () => {
 
 const isFavorite = async () => {
   const recipeRef = doc(db, "recipe", state.docId)
+
   state.favorite = !state.favorite
   await updateDoc(recipeRef, {
     isFavorite: state.favorite
   })
+
+  if (state.favorite) {
+    toastMessage.value = 'Successfully added to favorites!';
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
+  }
 }
+
+const showToast = ref(false);
+const toastMessage = ref('');
+
 </script>

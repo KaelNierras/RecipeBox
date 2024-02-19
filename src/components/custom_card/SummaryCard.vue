@@ -34,7 +34,7 @@
                 Cooking Time
               </p>
               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                of the ingredients
+                of the Recipe
               </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">

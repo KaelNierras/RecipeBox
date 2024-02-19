@@ -52,6 +52,10 @@ const signOut = async () => {
       localStorage.removeItem('user_name');
       localStorage.removeItem('email');
       localStorage.removeItem('photoURL');
+      localStorage.removeItem('hasShownToast');
+      localStorage.removeItem('hasShownToastOut');
+      localStorage.removeItem('hasShownToastDeleted');
+      localStorage.removeItem('hasShownToastAdded');
    } catch (error) {
       window.alert(`Error signing in with email and password: ${(error as any).message}`);
    }
@@ -94,7 +98,7 @@ onMounted(() => {
 
 <template>
    <!-- Top Bar -->
-   <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+   <nav class="fixed top-0 z-40 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
          <div class="flex items-center justify-between">
             <div class="flex items-center justify-start rtl:justify-end">
@@ -138,7 +142,7 @@ onMounted(() => {
 
    <!-- Sidebar -->
    <aside id="logo-sidebar"
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-slate-100 border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 left-0 z-30 w-64 h-screen pt-20 transition-transform -translate-x-full bg-slate-100 border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidebar">
       <div class="h-full px-3 pb-4 overflow-y-auto bg-slate-100 dark:bg-gray-800 d-flex flex-column justify-content-between">
          <div class="flex flow-row justify-Start ml-2 items-center">

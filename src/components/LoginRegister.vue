@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useToast } from '@/components/ui/toast/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -19,7 +20,9 @@ import {
 import { ref, onMounted } from 'vue'
 import { getAuth, GoogleAuthProvider, signInWithPopup,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router';
+import ToastNotification from './ToastNotification.vue';
 
+const { toast } = useToast()
 const router = useRouter();
 const auth = getAuth();
 
@@ -29,24 +32,42 @@ const password_login = ref('')
 const email_signup = ref('')
 const password_signup = ref('')
 
+const showToast = ref(false);
+const toastMessage = ref('');
+
+if (localStorage.getItem('hasShownToastOut') !== 'true') {
+  toastMessage.value = 'Successfully Logged Out!';
+  showToast.value = true;
+  setTimeout(() => {
+    showToast.value = false;
+  }, 3000);
+  localStorage.setItem('hasShownToastOut', 'true');
+}
+
 
 const signInWithEmail = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.alert('Successfully signed in with email and password');
+    toast({
+        description: 'Successfully signed in with email and password',
+      });
     router.push('/dashboard');
   } catch (error) {
-    window.alert(`Error signing in with email and password: ${error}`);
+    toast({
+        description: `Error signing in with email and password: ${error}`,
+      });
   }
 };
 
 const signUpWithEmail = async () => {
   try {
     await createUserWithEmailAndPassword(auth, email_signup.value, password_signup.value)
-    window.alert('Successfully signed up with email and password');
     router.push('/dashboard');
   } catch (error) {
-    window.alert(`Error signing up with email and password: ${error}`)
+    //window.alert(`Error signing up with email and password: ${error}`)
+    toast({
+        description: `Error signing up with email and password: ${error}`,
+      });
   }
 }
 
@@ -54,10 +75,13 @@ const signInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-    window.alert('Successfully signed in with Google');
     router.push('/dashboard');
   } catch (error) {
-    window.alert(`Error signing in with Google: ${error}`);
+    toastMessage.value = `Error signing in with Google: ${error}`;
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
   }
 };
 
@@ -95,6 +119,9 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+          <ToastNotification :show="showToast" :message="toastMessage" />
+  </div>
   <div class="flex items-center ms-3">
     <Button variant="ghost" size="sm" class="mr-4" @click="toggleDarkMode">
       <span class="material-symbols-outlined">
