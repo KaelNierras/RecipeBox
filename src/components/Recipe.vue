@@ -3,7 +3,7 @@
     <div class="flex flex-col justify-center text-center w-full">
       <h1 class="text-gray-400 dark:text-gray-700 text-2xl sm:text-2xl md:text-3xl font-semibold">
 "Oops! No recipe found!"</h1>
-  <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-9xl">
+  <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-7xl">
 sentiment_very_dissatisfied
 </span>
 
