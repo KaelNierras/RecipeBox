@@ -120,8 +120,13 @@ onMounted(() => {
                <!-- <a href="/" class="flex ms-2 md:me-24">
                   <img :src="darkMode ? '/logo_dark.png' : '/logo_light.png'" class="h-9 me-3" alt="VoteHub Logo" />
                </a> -->
-               <img :src="darkMode ? '/recipes-light.svg' : '/recipes.svg'" class="h-6 me-3" alt="RecipeBox Logo" />
-               <div class="text-2xl font-bold">Recipe Box</div>
+       
+               <router-link :to="{ path: '/dashboard' }"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
+                  <img :src="darkMode ? '/recipes-light.svg' : '/recipes.svg'" class="h-6 me-3" alt="RecipeBox Logo" />
+                  <div class="text-2xl font-bold">Recipe Box</div>
+               </router-link>
+
             </div>
             <div class="flex items-center">
 
