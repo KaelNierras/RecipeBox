@@ -33,16 +33,6 @@ const password_signup = ref('')
 const showToast = ref(false);
 const toastMessage = ref('');
 
-if (localStorage.getItem('hasShownToastOut') !== 'true') {
-  toastMessage.value = 'Successfully Logged Out!';
-  showToast.value = true;
-  setTimeout(() => {
-    showToast.value = false;
-  }, 3000);
-  localStorage.setItem('hasShownToastOut', 'true');
-}
-
-
 const signInWithEmail = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
