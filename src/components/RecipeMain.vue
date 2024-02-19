@@ -6,8 +6,27 @@
     <div class="w-full md:h-52 h-52 relative bg-cover bg-center" :style="{ backgroundImage: `url(${bgImage})` }">
       <div class="absolute inset-0 bg-black opacity-50"></div>
       <div class="absolute top-0 left-0 p-7">
-        <h1 class="text-4xl font-bold text-white">{{ selectedRecipe?.title }}</h1>
-        <p class="pt-2 max-w-md text-white">{{ selectedRecipe?.description }}</p>
+        <div v-if="!isEditing">
+          <div class="flex flex-row justify-center items-center">
+            <span class="material-symbols-outlined text-blue-600 hover:cursor-pointer" @click="isEditing = true">
+              edit
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-bold text-white">{{ selectedRecipe?.title }}</h1>
+
+          </div>
+          <p class="pt-2 max-w-md text-white">{{ selectedRecipe?.description }}</p>
+        </div>
+        <div class="flex flex-col" v-if="isEditing">
+          <div class="flex flex-row justify-center items-center">
+            <span class="material-symbols-outlined text-blue-600 hover:cursor-pointer" @click="updateTitleandDescription">
+              edit
+            </span>
+            <input v-model="title" type="text" placeholder="Quantity" class="border rounded p-2 w-full text-black ">
+
+          </div>
+          <Textarea id="description" v-model="description" 
+                    class="appearance-none box-border text-gray-700 bg-white mt-2" />
+        </div>
       </div>
     </div>
     <div class="flex flex-col gap-9 w-full flex-grow bg-slate-200 dark:bg-gray-700 rounded-t-3xl -mt-8 z-30 p-10">
@@ -86,10 +105,14 @@ import { db } from '@/firebase';
 import { query } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
 import ToastNotification from './ToastNotification.vue';
+import { Textarea } from '@/components/ui/textarea'
 
 const selectedRecipeStore = useSelectedRecipeStore();
 const selectedRecipe = selectedRecipeStore.item;
+var title = ref(selectedRecipe?.title);
+var description = ref(selectedRecipe?.description);
 const bgImage = ref();
+var isEditing = ref(false);
 const state = reactive({
   docId: '', // Changed from String to string
   imageName: '', // Changed from String to string
@@ -101,31 +124,35 @@ const showModal = ref(false);
 const isLoading = ref(true);
 
 onMounted(async () => {
-  try {
-    const selectedTitle = selectedRecipe?.title;
-    const q = query(collection(db, 'recipe'), where('title', '==', selectedTitle), where('userId', '==', localStorage.getItem('currentUserId')));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.size > 0) {
-      const matchingRecipe = querySnapshot.docs[0];
-      const matchingRecipeData = matchingRecipe.data();
-
-      if (matchingRecipeData.image) {
-        bgImage.value = matchingRecipeData.image;
-      }
-
-      state.docId = matchingRecipe.id;
-      state.imageName = matchingRecipeData.imageName;
-      state.favorite = matchingRecipeData.isFavorite;
-      isLoading.value = false;
-    } else {
-      console.warn(`No matching recipe found for title: ${selectedTitle}`);
-    }
-  } catch (error) {
-    console.error('Error fetching image from Firestore:', error);
-    isLoading.value = false;
-  }
+  const selectedTitle = selectedRecipe?.title;
+  await fetchRecipeData(selectedTitle);
 });
+
+async function fetchRecipeData(selectedTitle: any) {
+      try {
+        const q = query(collection(db, 'recipe'), where('title', '==', selectedTitle), where('userId', '==', localStorage.getItem('currentUserId')));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.size > 0) {
+          const matchingRecipe = querySnapshot.docs[0];
+          const matchingRecipeData = matchingRecipe.data();
+
+          if (matchingRecipeData.image) {
+            bgImage.value = matchingRecipeData.image;
+          }
+
+          state.docId = matchingRecipe.id;
+          state.imageName = matchingRecipeData.imageName;
+          state.favorite = matchingRecipeData.isFavorite;
+          isLoading.value = false;
+        } else {
+          console.warn(`No matching recipe found for title: ${selectedTitle}`);
+        }
+      } catch (error) {
+        console.error('Error fetching image from Firestore:', error);
+        isLoading.value = false;
+      }
+    }
 
 const deleteRecipe = async () => {
   if (localStorage.getItem('recipeCount') == '1') {
@@ -137,6 +164,20 @@ const deleteRecipe = async () => {
     const imageRef = storageRef(storage, `/images/${state.imageName}`);
     await deleteObject(imageRef);
     window.alert('Recipe deleted successfully.');
+    router.push('/Recipe');
+  }
+};
+
+const updateTitleandDescription = async () => {
+  if (state.docId) {
+    const recipeRef = doc(db, 'recipe', state.docId);
+    await updateDoc(recipeRef, {
+      title: title.value,
+      description: description.value,
+    });
+    isEditing.value = false;
+    await fetchRecipeData(title.value);
+    // Refresh the browser
     router.push('/Recipe');
   }
 };
