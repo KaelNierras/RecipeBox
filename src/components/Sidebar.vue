@@ -160,8 +160,8 @@ onMounted(() => {
          <ul class="space-y-2 font-medium">
             <li>
                <router-link :to="{ path: '/dashboard' }"
-                  :class="{ 'bg-gray-700': darkMode && isActive('/dashboard'), 'bg-gray-100': !darkMode && isActive('/dashboard') }"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  :class="{ 'bg-gray-700': darkMode && isActive('/dashboard'), 'bg-gray-300': !darkMode && isActive('/dashboard') }"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <span
                      :class="{ 'text-gray-900': darkMode && isActive('/dashboard'), 'text-gray-500': !darkMode && isActive('/dashboard') }"
                      class="material-symbols-outlined flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -174,8 +174,8 @@ onMounted(() => {
             </li>
             <li>
                <router-link :to="{ path: '/recipe' }"
-                  :class="{ 'bg-gray-700': darkMode && isActive('/recipe'), 'bg-gray-100': !darkMode && isActive('/recipe') }"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  :class="{ 'bg-gray-700': darkMode && isActive('/recipe'), 'bg-gray-300': !darkMode && isActive('/recipe') }"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <span
                      :class="{ 'text-gray-900': darkMode && isActive('/recipe'), 'text-gray-500': !darkMode && isActive('/recipe') }"
                      class="material-symbols-outlined flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
