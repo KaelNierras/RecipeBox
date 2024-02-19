@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useToast } from '@/components/ui/toast/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -22,7 +21,6 @@ import { getAuth, GoogleAuthProvider, signInWithPopup,signInWithEmailAndPassword
 import { useRouter } from 'vue-router';
 import ToastNotification from './ToastNotification.vue';
 
-const { toast } = useToast()
 const router = useRouter();
 const auth = getAuth();
 
@@ -48,14 +46,13 @@ if (localStorage.getItem('hasShownToastOut') !== 'true') {
 const signInWithEmail = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    toast({
-        description: 'Successfully signed in with email and password',
-      });
     router.push('/dashboard');
   } catch (error) {
-    toast({
-        description: `Error signing in with email and password: ${error}`,
-      });
+    toastMessage.value = `Error signing in with email and password: ${error}`;
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
   }
 };
 
@@ -65,9 +62,11 @@ const signUpWithEmail = async () => {
     router.push('/dashboard');
   } catch (error) {
     //window.alert(`Error signing up with email and password: ${error}`)
-    toast({
-        description: `Error signing up with email and password: ${error}`,
-      });
+    toastMessage.value = `Error signing up with email and password: ${error}`;
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
   }
 }
 
