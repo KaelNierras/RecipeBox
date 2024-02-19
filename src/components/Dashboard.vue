@@ -144,16 +144,16 @@ watchEffect(() => {
   <div class="pt-5 px-4 flex flex-wrap flex-col">
     <h3 class="text-lg font-bold p-2" v-if="recipes.length > 0">Favorites</h3>
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
-      class="m-3 w-auto h-64 overflow-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 relative">
+      class="m-3 w-auto h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
       <div class="relative">
         <a href="#">
-          <h5 class="mb-2 text-2xl font-bold tracking-tight text-white  dark:text-white    ">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-white  dark:text-white drop-shadow-text">
             {{ item.title }}
           </h5>
         </a>
-        <p class="mb-3 font-normal text-white h-28 dark:text-white">
+        <p class="mb-3 font-normal text-white h-28 dark:text-white drop-shadow-text">
           {{ item.description }}
         </p>
         <a href="#"
@@ -170,4 +170,8 @@ watchEffect(() => {
   </div>
 </template>
 
-
+<style scoped>
+.drop-shadow-text {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+</style>
