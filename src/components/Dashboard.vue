@@ -81,11 +81,24 @@ onMounted(async () => {
   });
   getCurrentDate();
 });
+
 const getCurrentDate = () => {
   const now = new Date();
   const formattedDate = now.toDateString();
   currentDate.value = formattedDate;
 };
+
+const showFavorite = ref(false);
+
+watchEffect(() => {
+  if (recipes.value.length > 0) {
+    setTimeout(() => {
+      showFavorite.value = true;
+    }, 3000);
+  } else {
+    showFavorite.value = false;
+  }
+});
 
 const router = useRouter();
 const selectedRecipeStore = useSelectedRecipeStore();
@@ -152,7 +165,7 @@ watchEffect(() => {
 
   </div>
   <div class="pt-5 px-4 flex flex-wrap flex-col">
-    <h3 class="text-lg font-bold p-2" v-if="recipes.length > 0">Favorites</h3>
+    <h3 class="text-lg font-bold p-2" v-if="showFavorite">Favorites</h3>
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
       class="m-3 w-auto h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
