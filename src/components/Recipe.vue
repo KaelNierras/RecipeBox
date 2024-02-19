@@ -1,7 +1,14 @@
 <template>
-
-
   <div class="pt-20 px-4 flex flex-wrap">
+    <div class="flex flex-col justify-center text-center w-full">
+      <h1 class="text-gray-400 dark:text-gray-700 text-2xl sm:text-2xl md:text-3xl font-semibold">
+"Oops! No recipe found!"</h1>
+  <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-9xl">
+sentiment_very_dissatisfied
+</span>
+
+    </div>
+  
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
       class="m-3 w-96 h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
@@ -46,7 +53,8 @@
                 </div>
                 <div class="flex flex-col space-y-1.5">
                   <Label for="description">Description</Label>
-                  <Textarea id="description" v-model="newRecipe.description" placeholder="Write a Short Description" class="appearance-none box-border" />
+                  <Textarea id="description" v-model="newRecipe.description" placeholder="Write a Short Description"
+                    class="appearance-none box-border" />
                 </div>
                 <div class="flex flex-col space-y-1.5">
                   <Label for="image">Cover Photo</Label>
@@ -75,13 +83,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
 import { db } from '@/firebase';  // import the db constant
-import { addDoc, collection, getDocs,query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from 'vue-router';
-import {useSelectedRecipeStore} from '@/stores/selectedRecipe';
-import {uploadBytes, getDownloadURL, ref as refStore } from 'firebase/storage';
-import { getStorage} from "firebase/storage";
+import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
+import { uploadBytes, getDownloadURL, ref as refStore } from 'firebase/storage';
+import { getStorage } from "firebase/storage";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 //Text Area
