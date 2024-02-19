@@ -14,8 +14,10 @@
       <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
         <li v-for="(ingredient, index) in state.ingredients" :key="index" class="py-3 sm:py-4">
           <div class="flex items-center">
-            <button v-if="state.isEditing" @click="deleteCustomer(index)"
+            <button v-if="state.isEditing" @click="deleteIngredient(index)"
               class="text-red-500 hover:text-red-700 mr-4">Delete</button>
+              <button v-if="state.isEditing" @click="editIngredient(index)"
+                class="text-blue-500 hover:text-blue-700 mr-4">Edit</button>
             <div class="flex-1 min-w-0 ms-4">
               <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                 {{ ingredient.title }}
@@ -61,9 +63,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const state = reactive({
-  ingredients: [] as { title: String, details: String, price: number, quantity: number}[],
+  ingredients: [] as { title: string, details: string, price: number, quantity: number}[],
   newingredient: { title: '', details: '', price: '', quantity: ''},
-  isEditing: false
+  isEditing: false,
+  editingIndex: null as number | null
 });
 
 watchEffect(async () => {
@@ -96,7 +99,7 @@ const updateTotalAmount = () => {
 };
 
 
-const deleteCustomer = (index: number) => {
+const deleteIngredient = (index: number) => {
   state.ingredients.splice(index, 1);
 };
 
@@ -117,18 +120,40 @@ const toggleEditing = () => {
   }
 };
 
+const editIngredient = (index: number) => {
+  state.newingredient = {
+    ...state.ingredients[index],
+    price: state.ingredients[index].price.toString(),
+    quantity: state.ingredients[index].quantity.toString()
+  };
+  state.editingIndex = index;
+};
+
 const addInstruction = () => {
   if (state.newingredient.title) {
-    state.ingredients.push({
-      title: state.newingredient.title,
-      details: state.newingredient.details,
-      price: Number(state.newingredient.price),
-      quantity: Number(state.newingredient.quantity),
-    });
-    state.newingredient.title = ''; // Clear the input field after adding the instruction
-    state.newingredient.details = ''; // Clear the input field after adding the instruction
-    state.newingredient.price = ''; // Clear the input field after adding the instruction
-    state.newingredient.quantity = ''; // Clear the input field after adding the instruction
+    if (state.isEditing && state.editingIndex !== null) {
+      // Update the ingredient being edited
+      state.ingredients[state.editingIndex] = {
+        title: state.newingredient.title,
+        details: state.newingredient.details,
+        price: Number(state.newingredient.price),
+        quantity: Number(state.newingredient.quantity),
+      };
+    } else {
+      // Add a new ingredient
+      state.ingredients.push({
+        title: state.newingredient.title,
+        details: state.newingredient.details,
+        price: Number(state.newingredient.price),
+        quantity: Number(state.newingredient.quantity),
+      });
+    }
+
+    // Clear the input fields and exit editing mode
+    state.newingredient.title = '';
+    state.newingredient.details = '';
+    state.newingredient.price = '';
+    state.newingredient.quantity = '';
   }
 };
 </script>

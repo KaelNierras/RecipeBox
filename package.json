@@ -23,7 +23,8 @@
     "tailwindcss-animate": "^1.0.7",
     "toast": "^0.5.4",
     "vue": "^3.4.19",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",

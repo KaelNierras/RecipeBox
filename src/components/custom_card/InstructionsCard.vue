@@ -14,9 +14,11 @@
       <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
         <li v-for="(instruction, index) in state.instructions" :key="index" class="py-3 sm:py-4">
           <div class="flex items-center">
-            <button v-if="state.isEditing" @click="deleteCustomer(index)"
-              class="text-red-500 hover:text-red-700 mr-4">Delete</button>
-            <div class="flex-1 min-w-0 ms-4">
+            <button v-if="state.isEditing" @click="deleteInstruction(index)"
+      class="text-red-500 hover:text-red-700 mr-4">Delete</button>
+            <button v-if="state.isEditing" @click="editInstruction(index)"
+              class="text-blue-500 hover:text-blue-700 mr-4">Edit</button>
+              <div class="flex-1 min-w-0 ms-4">
               <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                 {{ `${instruction.title} (${instruction.time} mins)` }}
               </p>
@@ -31,6 +33,7 @@
         </li>
       </ul>
     </div>
+    
 
     <div v-if="state.isEditing" class="mb-4 flex gap-3 flex-col">
       <input v-model="state.newInstruction.title" type="text" placeholder="Title"
@@ -57,9 +60,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const state = reactive({
-  instructions: [] as { title: String, details: String, time: number}[],
+  instructions: [] as { title: string, details: string, time: number}[],
   newInstruction: { title: '', details: '', time: '' as any},
-  isEditing: false
+  isEditing: false,
+  editingIndex: null as number | null
 });
 
 watchEffect(async () => {
@@ -90,11 +94,6 @@ const updateTotalTime = () => {
   });
 };
 
-
-const deleteCustomer = (index: number) => {
-  state.instructions.splice(index, 1);
-};
-
 const updateInstructions = async () => {
   if (props.id) {
     const docRef = doc(db, 'recipe', props.id)
@@ -112,16 +111,37 @@ const toggleEditing = () => {
   }
 };
 
+const deleteInstruction = (index: number) => {
+  state.instructions.splice(index, 1);
+};
+
+const editInstruction = (index: number) => {
+  state.newInstruction = { ...state.instructions[index] };
+  state.editingIndex = index;
+};
+
 const addInstruction = () => {
   if (state.newInstruction.title) {
-    state.instructions.push({
-      title: state.newInstruction.title,
-      details: state.newInstruction.details,
-      time: state.newInstruction.time,
-    });
-    state.newInstruction.title = ''; // Clear the input field after adding the instruction
-    state.newInstruction.details = ''; // Clear the input field after adding the instruction
-    state.newInstruction.time; // Clear the input field after adding the instruction
+    if (state.editingIndex !== null) {
+      // If an instruction is being edited, update it
+      state.instructions[state.editingIndex] = {
+        title: state.newInstruction.title,
+        details: state.newInstruction.details,
+        time: state.newInstruction.time,
+      };
+      state.editingIndex = null; // Reset the editing index
+    } else {
+      // If no instruction is being edited, add a new one
+      state.instructions.push({
+        title: state.newInstruction.title,
+        details: state.newInstruction.details,
+        time: state.newInstruction.time,
+      });
+    }
+    // Clear the input fields
+    state.newInstruction.title = '';
+    state.newInstruction.details = '';
+    state.newInstruction.time = '';
   }
 };
-</script>@/stores/TotalCookingTime
+</script>
