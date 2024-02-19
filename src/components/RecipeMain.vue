@@ -3,9 +3,9 @@
     <ToastNotification :show="showToast" :message="toastMessage" />
   </div>
   <div class="pt-14 w-full min-h-screen flex flex-col">
-    <div class="w-full md:h-52 h-52 relative bg-cover bg-center" :style="{ backgroundImage: `url(${bgImage})` }">
+    <div class="w-full md:h-52 h-56 relative bg-cover bg-center" :style="{ backgroundImage: `url(${bgImage})` }">
       <div class="absolute inset-0 bg-black opacity-50"></div>
-      <div class="absolute top-0 left-0 p-7">
+      <div class="absolute top-0 left-0 p-7 mt-2">
         <div v-if="!isEditing">
           <div class="flex flex-row justify-start items-center gap-2">
             <span class="material-symbols-outlined bg-green-700 p-1 rounded text-white hover:cursor-pointer" @click="isEditing = true">
