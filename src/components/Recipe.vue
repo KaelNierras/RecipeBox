@@ -1,6 +1,6 @@
 <template>
   <div class="pt-20 px-4 flex flex-wrap">
-    <div class="flex flex-col justify-center text-center w-full" v-if="getrecipeCount === '0'">
+    <div class="flex flex-col justify-center text-center w-full" v-if="recipeCount == '0'">
       <h1 class="text-gray-400 dark:text-gray-700 text-2xl sm:text-2xl md:text-3xl font-semibold">
         "Oops! No recipe found!"</h1>
       <span class="material-symbols-outlined text-gray-400 dark:text-gray-700  text-7xl">
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, onMounted, computed } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
 import { db } from '@/firebase';  // import the db constant
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from 'vue-router';
@@ -119,12 +119,12 @@ interface Recipe {
 
 const recipes = ref(<Recipe[]>([]));
 const user_id = ref('');
+var recipeCount = ref('');
 
-const getrecipeCount = computed(() => {
-  console.log(localStorage.getItem('recipeCount'));
-  return (localStorage.getItem('recipeCount') ?? '0');
-});
+const getrecipeCount = () => {
+  recipeCount.value = localStorage.getItem('recipeCount') ?? '0';
 
+};
 const auth = getAuth();
 setPersistence(auth, browserSessionPersistence);
 
@@ -207,6 +207,12 @@ const addRecipe = async () => {
       description: '',
       image: '',
     };
+    console.log(localStorage.getItem('recipeCount'));
+    if (localStorage.getItem('recipeCount') == '0')
+    {
+      localStorage.setItem('recipeCount', '1');
+    }
+    console.log(localStorage.getItem('recipeCount'));
 
     // Show an alert
     window.alert('Recipe added successfully.');
@@ -236,6 +242,7 @@ const selectAndGoToRecipe = (item: typeof recipes.value[0]) => {
 
 watchEffect(() => {
   localStorage.setItem('items', JSON.stringify(recipes.value));
+  getrecipeCount();
 });
 
 

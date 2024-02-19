@@ -1,6 +1,6 @@
 <template>
   <div class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <ToastNotification :show="showToast" :message="toastMessage" />
+    <ToastNotification :show="showToast" :message="toastMessage" />
   </div>
   <div class="pt-14 w-full min-h-screen flex flex-col">
     <div class="w-full md:h-52 h-52 relative bg-cover bg-center" :style="{ backgroundImage: `url(${bgImage})` }">
@@ -19,15 +19,15 @@
       <div class="flex justify-end items-end ">
 
         <button @click="isFavorite()"
-                :class="{' bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 text-white': state.favorite, 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800': !state.favorite}"
-                type="button">
+          :class="{ ' bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 text-white': state.favorite, 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800': !state.favorite }"
+          type="button">
           <span class="material-symbols-outlined">
             {{ state.favorite ? 'heart_check' : 'favorite' }}
           </span>
         </button>
-       
-                
-        <button @click="showModal = true" 
+
+
+        <button @click="showModal = true"
           class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           type="button">
           <span class="material-symbols-outlined">
@@ -35,11 +35,10 @@
           </span>
         </button>
 
-        <div v-if="showModal" 
-          class="flex items-center justify-center fixed top-0 right-0 bottom-0 left-0 z-50">
+        <div v-if="showModal" class="flex items-center justify-center fixed top-0 right-0 bottom-0 left-0 z-50">
           <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <button type="button"  @click="showModal= false"
+              <button type="button" @click="showModal = false"
                 class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="popup-modal">
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -77,7 +76,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { onMounted } from 'vue';
-import { collection, getDocs, where, doc, deleteDoc,updateDoc } from 'firebase/firestore';
+import { collection, getDocs, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
 import { useSelectedRecipeStore } from '@/stores/selectedRecipe';
 import IngredientCard from '@/components/custom_card/IngredientCard.vue'
@@ -129,6 +128,9 @@ onMounted(async () => {
 });
 
 const deleteRecipe = async () => {
+  if (localStorage.getItem('recipeCount') == '1') {
+    localStorage.setItem('recipeCount', '0');
+  }
   if (state.docId) {
     await deleteDoc(doc(db, 'recipe', state.docId)); // This should work now
     const storage = getStorage();
