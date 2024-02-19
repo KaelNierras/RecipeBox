@@ -141,6 +141,15 @@ watchEffect(() => {
       </CardContent>
     </Card>
   </div>
+  <div class="pt-5 px-4 flex flex-wrap flex-col gap-4" v-if="recipeCount == 0">
+    
+    <h1 class="text-3xl sm:text-2xl md:text-4xl font-semibold">Create your First Recipe!</h1>
+    <router-link :to="{ path: '/recipe'}"
+      class="text-center py-2.5 px-5 text-sm font-medium text-white focus:outline-none bg-green-700 rounded-lg border border-gray-200 hover:bg-gray-400 hover:text-grey-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-green-700 dark:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-36 h-12">
+    Create Recipe
+    </router-link>
+
+  </div>
   <div class="pt-5 px-4 flex flex-wrap flex-col">
     <h3 class="text-lg font-bold p-2" v-if="recipes.length > 0">Favorites</h3>
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
