@@ -132,7 +132,10 @@ onMounted(() => {
 
                <div class="flex items-center ms-3">
                   <Button variant="ghost" size="sm" class="mr-0" @click="toggleDarkMode">
-                     <span class="material-symbols-outlined">
+                     <span class="material-symbols-outlined" v-if="darkMode">
+                        light_mode
+                     </span>
+                     <span class="material-symbols-outlined" v-else>
                         dark_mode
                      </span>
                   </Button>
