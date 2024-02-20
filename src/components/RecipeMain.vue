@@ -14,7 +14,7 @@
             <h1 class="text-3xl sm:text-5xl font-bold text-white">{{ selectedRecipe?.title }}</h1>
 
           </div>
-          <p class="pt-2 max-w-md text-white">{{ selectedRecipe?.description }}</p>
+          <p class="pt-2 max-w-xl text-white">{{ selectedRecipe?.description }}</p>
         </div>
         <div class="flex flex-col" v-if="isEditing">
           <div class="flex flex-row justify-center items-center gap-2">
