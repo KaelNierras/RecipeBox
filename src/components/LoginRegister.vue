@@ -121,7 +121,7 @@ onMounted(() => {
       </span>
     </Button>
   </div>
-  <Tabs default-value="account" class="w-[400px]">
+  <Tabs default-value="account" class="w-[350px]">
     <TabsList class="grid w-full grid-cols-2">
       <TabsTrigger value="account">
         Log in
