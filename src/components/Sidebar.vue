@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useRoute, useRouter } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+
 const auth = getAuth();
 
 const user_name = ref('');
@@ -45,6 +46,27 @@ function toggleDarkMode() {
    const body = document.querySelector('body');
    body?.classList.toggle('dark', darkMode.value);
 }
+
+const sidebar = ref(null);
+
+const closeSidebar = () => {
+if (sidebar.value !== null) {
+   (sidebar.value as HTMLElement).style.transform = 'translateX(-100%)';
+}
+};
+
+const toggleSidebar = () => {
+  if (sidebar.value !== null) {
+    const currentTransform = (sidebar.value as HTMLElement).style.transform;
+    if (currentTransform === 'translateX(0%)') {
+      // If the sidebar is open, close it
+      (sidebar.value as HTMLElement).style.transform = 'translateX(-100%)';
+    } else {
+      // If the sidebar is closed, open it
+      (sidebar.value as HTMLElement).style.transform = 'translateX(0%)';
+    }
+  }
+};
 
 const signOut = async () => {
    try {
@@ -106,7 +128,7 @@ onMounted(() => {
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
          <div class="flex items-center justify-between">
             <div class="flex items-center justify-start rtl:justify-end">
-               <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+               <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" @click="toggleSidebar"
                   type="button"
                   class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                   <span class="sr-only">Open sidebar</span>
@@ -117,10 +139,6 @@ onMounted(() => {
                      </path>
                   </svg>
                </button>
-               <!-- <a href="/" class="flex ms-2 md:me-24">
-                  <img :src="darkMode ? '/logo_dark.png' : '/logo_light.png'" class="h-9 me-3" alt="VoteHub Logo" />
-               </a> -->
-       
                <router-link :to="{ path: '/dashboard' }"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <img :src="darkMode ? '/recipes-light.svg' : '/recipes.svg'" class="h-6 me-3" alt="RecipeBox Logo" />
@@ -153,7 +171,7 @@ onMounted(() => {
    </nav>
 
    <!-- Sidebar -->
-   <aside id="logo-sidebar"
+   <aside id="logo-sidebar" ref="sidebar"
       class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-slate-100 border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidebar">
       <div class="h-full px-3 pb-4 overflow-y-auto bg-slate-100 dark:bg-gray-800 d-flex flex-column justify-content-between">
@@ -167,7 +185,7 @@ onMounted(() => {
          <hr class=" border-gray-700 dark:border-white my-6">
          <ul class="space-y-2 font-medium">
             <li>
-               <router-link :to="{ path: '/dashboard' }"
+               <router-link :to="{ path: '/dashboard' }" @click="closeSidebar"
                   :class="{ 'bg-gray-700': darkMode && isActive('/dashboard'), 'bg-gray-300': !darkMode && isActive('/dashboard') }"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <span
@@ -181,7 +199,7 @@ onMounted(() => {
 
             </li>
             <li>
-               <router-link :to="{ path: '/recipe' }"
+               <router-link :to="{ path: '/recipe' }" @click="closeSidebar"
                   :class="{ 'bg-gray-700': darkMode && isActive('/recipe'), 'bg-gray-300': !darkMode && isActive('/recipe') }"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <span
@@ -206,3 +224,11 @@ onMounted(() => {
       </div>
    </div>
 </template>
+
+<style scoped>
+#logo-sidebar {
+  transition: transform 0.3s ease-out;
+  transform: translateX(0);
+}
+
+</style>

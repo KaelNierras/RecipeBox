@@ -22,6 +22,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "toast": "^0.5.4",
+    "v-click-outside": "^3.2.0",
     "vue": "^3.4.19",
     "vue-router": "^4.2.5",
     "vuedraggable": "^2.24.3"
