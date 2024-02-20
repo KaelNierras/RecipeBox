@@ -17,7 +17,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { ref, onMounted } from 'vue'
-import { getAuth, GoogleAuthProvider, signInWithPopup,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router';
 import ToastNotification from './ToastNotification.vue';
 
@@ -109,11 +109,14 @@ onMounted(() => {
 
 <template>
   <div class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-          <ToastNotification :show="showToast" :message="toastMessage" />
+    <ToastNotification :show="showToast" :message="toastMessage" />
   </div>
   <div class="flex items-center ms-3">
-    <Button variant="ghost" size="sm" class="mr-4" @click="toggleDarkMode">
-      <span class="material-symbols-outlined">
+    <Button variant="ghost" size="sm" class="mr-0" @click="toggleDarkMode">
+      <span class="material-symbols-outlined" v-if="darkMode">
+        light_mode
+      </span>
+      <span class="material-symbols-outlined" v-else>
         dark_mode
       </span>
     </Button>
@@ -134,11 +137,12 @@ onMounted(() => {
           <CardDescription>
             Login to your account to access your dashboard.
           </CardDescription>
-          <Button class="bg-white border  dark:bg-gray-800  border-gray-300 text-gray-700 hover:bg-gray-100" @click="signInWithGoogle ">
-          <img src="/google.svg" alt="Google icon" class="inline-block mr-2 w-5"> 
-          <p class="text-dark dark:text-white">Log in with Google</p>
-          
-        </Button>
+          <Button class="bg-white border  dark:bg-gray-800  border-gray-300 text-gray-700 hover:bg-gray-100"
+            @click="signInWithGoogle">
+            <img src="/google.svg" alt="Google icon" class="inline-block mr-2 w-5">
+            <p class="text-dark dark:text-white">Log in with Google</p>
+
+          </Button>
         </CardHeader>
         <CardContent class="space-y-2">
           <p class="flex items-center justify-center">or</p>
@@ -148,7 +152,7 @@ onMounted(() => {
           </div>
           <div class="space-y-1">
             <Label for="passwordLog">Password</Label>
-            <Input v-model="password_login" type="password"/>
+            <Input v-model="password_login" type="password" />
           </div>
         </CardContent>
         <CardFooter>
