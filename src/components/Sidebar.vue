@@ -167,7 +167,7 @@ onMounted(() => {
          <hr class=" border-gray-700 dark:border-white my-6">
          <ul class="space-y-2 font-medium">
             <li>
-               <router-link :to="{ path: '/dashboard' }"
+               <router-link :to="{ path: '/dashboard' }" 
                   :class="{ 'bg-gray-700': darkMode && isActive('/dashboard'), 'bg-gray-300': !darkMode && isActive('/dashboard') }"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group">
                   <span
