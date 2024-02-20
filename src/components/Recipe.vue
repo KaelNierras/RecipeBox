@@ -10,7 +10,7 @@
     </div>
 
     <div v-for="(item, index) in recipes" :key="index" @click="selectAndGoToRecipe(item)"
-      class="m-3 w-96 sm:w-80 h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
+      class="m-3 w-96 sm:w-[500px] h-64 overflow-auto p-6 bg-white rounded-lg shadow dark:bg-gray-800 relative">
       <div class="absolute inset-0 bg-black opacity-90  dark:opacity-40"
         :style="{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover' }"></div>
       <div class="relative">
@@ -19,7 +19,7 @@
             {{ item.title }}
           </h5>
         </a>
-        <p class="mb-3 font-normal text-white h-28 dark:text-white drop-shadow-text">
+        <p class="mb-3 font-normal text-white h-24 dark:text-white drop-shadow-text">
           {{ item.description }}
         </p>
         <a href="#"
